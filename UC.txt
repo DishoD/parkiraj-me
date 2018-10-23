@@ -1,0 +1,8 @@
+UC3: Ureðivanje korisnièkih podataka
+UC4: Rezervacija jednokratna
+UC5: Rezervacija ponavljajuæa(trajna)
+UC6: Brisanje korisnièkog raèuna
+UC7: Brisanje rezervacije
+UC8: Tražeje najbližeg parkinga
+UC9: Ureðivanje podataka o parkingu
+UC10: Izlistaj popis svih parkirališta
