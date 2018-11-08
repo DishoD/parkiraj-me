@@ -1,0 +1,39 @@
+Korisnik
+-e-mail
+-šifra(hash)
+-OIB
+-ime
+-prezime
+-broj kreditne kartice
+
+Tvrtka
+-OIB
+-ime
+-adresa sjedišta
+-e-mail
+-šifra(hash)
+
+Administrator
+-e-mail
+-šifra(hash)
+
+Automobili
+-OIB (korisnika)
+-registracija
+-ime
+
+
+Parkiralište
+-id
+-OIB (tvrtke)
+-kapacitet
+-lokacija
+-ime
+-cijena (po satu)
+
+Rezervacija
+-id
+-registracija (automobila)
+-vrijeme poèetka (datum) 
+-trajanje
+-parking id
