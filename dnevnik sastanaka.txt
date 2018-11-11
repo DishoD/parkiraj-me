@@ -1,13 +1,8 @@
 #9.10.2018.
- Prvi sastanak. Upoznavanje.
-
-
-
-
+Prvi sastanak. Upoznavanje.
 
 #23.10.2018.
- Dugi sastanak. Odabir tehnologije, rasprava o funkcionalnostima aplikacije,
- 
-popis svih obrazaca uporabe.
+Dugi sastanak. Odabir tehnologije, rasprava o funkcionalnostima aplikacije, popis svih obrazaca uporabe.
 
-#6.11.2018. Treæi sastanak.
+#8.11.2018. 
+Trei sastanak. Ostali zahtjevi, razrada funkcionalnosti aplikacije, model baze podataka, podjela poslova. 
