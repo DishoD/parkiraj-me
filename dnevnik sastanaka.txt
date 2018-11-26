@@ -8,4 +8,4 @@ Dugi sastanak. Odabir tehnologije, rasprava o funkcionalnostima aplikacije, popi
 Treći sastanak. Ostali zahtjevi, razrada funkcionalnosti aplikacije, model baze podataka, podjela poslova. 
 
 #26.11.2018.
-četvrti sastanak. 
+četvrti sastanak. Dogovorena podjela poslova (Front-end, Back-end), dodatci A-D, dodatno uređivanje dokumentacije.
