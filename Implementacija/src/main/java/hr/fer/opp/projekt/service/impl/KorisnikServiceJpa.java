@@ -6,6 +6,7 @@ import hr.fer.opp.projekt.service.EntityMissingException;
 import hr.fer.opp.projekt.service.KorisnikService;
 import hr.fer.opp.projekt.service.RequestDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -39,6 +40,7 @@ public class KorisnikServiceJpa implements KorisnikService {
         Assert.isTrue(oib.matches(OIB_FORMAT), "OIB mora imati 11 znamenaka");
         Assert.isTrue(creditCardNumberIsValid(korisnik.getBrojKreditneKartice()), "Broj kreditne kartice nije valjan.");
         Assert.isTrue(korisnik.getEmail().matches(EMAIL_FORMAT), "Email nije valjan.");
+        korisnik.setPasswordHash(new BCryptPasswordEncoder().encode(korisnik.getPasswordHash()));
         return korisnikRepository.save(korisnik);
     }
 
@@ -47,6 +49,18 @@ public class KorisnikServiceJpa implements KorisnikService {
         return korisnikRepository.findById(id).orElseThrow(
                 () -> new EntityMissingException(Korisnik.class, id)
         );
+    }
+
+    @Override
+    public Korisnik fetchKorisnik(String email) {
+        return korisnikRepository.findByEmail(email).orElseThrow(
+                () -> new EntityMissingException(Korisnik.class, email)
+        );
+    }
+
+    @Override
+    public boolean containsKorisnik(String email) {
+        return korisnikRepository.findByEmail(email).isPresent();
     }
 
     //dummy CC broj koji prolazi provjeru: 54372012565022

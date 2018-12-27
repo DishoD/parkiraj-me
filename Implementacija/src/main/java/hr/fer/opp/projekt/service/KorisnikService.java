@@ -8,4 +8,6 @@ public interface KorisnikService {
     List<Korisnik> listAll();
     Korisnik createKorisnik(Korisnik korisnik);
     Korisnik fetchKorisnik(Long id);
+    Korisnik fetchKorisnik(String email);
+    boolean containsKorisnik(String email);
 }
