@@ -2,6 +2,7 @@ package hr.fer.opp.projekt.rest;
 
 import hr.fer.opp.projekt.domain.Korisnik;
 import hr.fer.opp.projekt.service.KorisnikService;
+import hr.fer.opp.projekt.service.RequestDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,16 +18,21 @@ public class KorisnikController {
     @Autowired
     private KorisnikService korisnikService;
 
-
     @GetMapping("")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public List<Korisnik> listKorisnike(@AuthenticationPrincipal User u) {
+    @Secured(Roles.ADMIN)
+    public List<Korisnik> listKorisnike() {
         return korisnikService.listAll();
     }
 
     @GetMapping("/{id}")
-    public Korisnik getKorisnik(@PathVariable("id") Long id) {
-        return korisnikService.fetchKorisnik(id);
+    @Secured({Roles.USER, Roles.ADMIN})
+    public Korisnik getKorisnik(@PathVariable("id") Long id, @AuthenticationPrincipal User u) {
+        Korisnik korisnik = korisnikService.fetchKorisnik(id);
+        if (korisnik.getEmail().equals(u.getUsername()) || "admin".equals(u.getUsername())) {
+            return korisnik;
+        } else {
+            throw new RequestDeniedException("You do not have permission to view this user.");
+        }
     }
 
     @PostMapping("")

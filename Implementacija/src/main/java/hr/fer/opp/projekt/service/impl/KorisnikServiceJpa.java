@@ -67,14 +67,11 @@ public class KorisnikServiceJpa implements KorisnikService {
     private boolean creditCardNumberIsValid(String ccNumber) {
         int sum = 0;
         boolean alternate = false;
-        for (int i = ccNumber.length() - 1; i >= 0; i--)
-        {
+        for (int i = ccNumber.length() - 1; i >= 0; i--) {
             int n = Integer.parseInt(ccNumber.substring(i, i + 1));
-            if (alternate)
-            {
+            if (alternate) {
                 n *= 2;
-                if (n > 9)
-                {
+                if (n > 9) {
                     n = (n % 10) + 1;
                 }
             }
