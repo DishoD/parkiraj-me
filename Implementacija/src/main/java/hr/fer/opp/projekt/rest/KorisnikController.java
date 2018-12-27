@@ -20,6 +20,11 @@ public class KorisnikController {
         return korisnikService.listAll();
     }
 
+    @GetMapping("/{id}")
+    public Korisnik getKorisnik(@PathVariable("id") Long id) {
+        return korisnikService.fetchKorisnik(id);
+    }
+
     @PostMapping("")
     public Korisnik createKorisnik(@RequestBody Korisnik korisnik) {
         return korisnikService.createKorisnik(korisnik);
