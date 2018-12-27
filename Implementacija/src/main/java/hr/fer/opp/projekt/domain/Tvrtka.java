@@ -6,12 +6,12 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
-@Table(name = "korisnik")
-public class Korisnik {
+@Table(name = "tvrtka")
+public class Tvrtka {
 
     @Id
     @GeneratedValue
-    @Column(name = "korisnik_ID")
+    @Column(name = "tvrtka_ID")
     private Long id;
 
     @Column(unique = true)
@@ -23,10 +23,7 @@ public class Korisnik {
     private String ime;
 
     @NotNull
-    private String prezime;
-
-    @NotNull
-    private String brojKreditneKartice;
+    private String adresaSjedista;
 
     @Column(unique = true)
     @NotNull
@@ -35,28 +32,12 @@ public class Korisnik {
     @NotNull
     private String passwordHash;
 
-    @OneToMany(mappedBy = "korisnik")
-    private Set<Automobil> automobili;
+    @OneToMany(mappedBy = "tvrtka")
+    private Set<Parkiraliste> parkiralista;
 
 
     public Long getId() {
         return id;
-    }
-
-    public String getIme() {
-        return ime;
-    }
-
-    public void setIme(String ime) {
-        this.ime = ime;
-    }
-
-    public String getPrezime() {
-        return prezime;
-    }
-
-    public void setPrezime(String prezime) {
-        this.prezime = prezime;
     }
 
     public String getOib() {
@@ -67,12 +48,20 @@ public class Korisnik {
         this.oib = oib;
     }
 
-    public String getBrojKreditneKartice() {
-        return brojKreditneKartice;
+    public String getIme() {
+        return ime;
     }
 
-    public void setBrojKreditneKartice(String brojKreditneKartice) {
-        this.brojKreditneKartice = brojKreditneKartice;
+    public void setIme(String ime) {
+        this.ime = ime;
+    }
+
+    public String getAdresaSjedista() {
+        return adresaSjedista;
+    }
+
+    public void setAdresaSjedista(String adresaSjedista) {
+        this.adresaSjedista = adresaSjedista;
     }
 
     public String getEmail() {
@@ -91,11 +80,11 @@ public class Korisnik {
         this.passwordHash = passwordHash;
     }
 
-    public Set<Automobil> getAutomobili() {
-        return automobili;
+    public Set<Parkiraliste> getParkiralista() {
+        return parkiralista;
     }
 
-    public void setAutomobili(Set<Automobil> automobili) {
-        this.automobili = automobili;
+    public void setParkiralista(Set<Parkiraliste> parkiralista) {
+        this.parkiralista = parkiralista;
     }
 }
