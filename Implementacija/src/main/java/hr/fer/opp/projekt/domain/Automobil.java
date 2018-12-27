@@ -28,7 +28,6 @@ public class Automobil {
     private Set<Rezervacija> rezervacije;
 
 
-
     public Long getId() {
         return id;
     }

@@ -27,6 +27,9 @@ public class Rezervacija {
     @NotNull
     private boolean trajnaRezervacija;
 
+    @ManyToOne
+    @JoinColumn(name = "parkiraliste_ID")
+    private Parkiraliste parkiraliste;
 
 
     public Automobil getAutomobil() {
