@@ -5,6 +5,7 @@ import hr.fer.opp.projekt.domain.Korisnik;
 import hr.fer.opp.projekt.service.EntityMissingException;
 import hr.fer.opp.projekt.service.KorisnikService;
 import hr.fer.opp.projekt.service.RequestDeniedException;
+import hr.fer.opp.projekt.service.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,6 @@ import java.util.List;
 
 @Service
 public class KorisnikServiceJpa implements KorisnikService {
-
-    private static final String OIB_FORMAT = "[0-9]{11}";
-    private static final String EMAIL_FORMAT = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
 
     @Autowired
     private KorisnikRepository korisnikRepository;
@@ -30,16 +28,22 @@ public class KorisnikServiceJpa implements KorisnikService {
     public Korisnik createKorisnik(Korisnik korisnik) {
         Assert.notNull(korisnik, "Korisnik ne smije biti null.");
         Assert.isNull(korisnik.getId(), "Korisnik ne smije imati id, on se automatski generira.");
+
+        Util.checkField(korisnik.getEmail(), "email");
+        Assert.isTrue(korisnik.getEmail().matches(Util.EMAIL_FORMAT), "Email nije valjan.");
+
+        Util.checkField(korisnik.getIme(), "ime");
+        Util.checkField(korisnik.getPrezime(), "prezime");
+
+        Util.checkField(korisnik.getOib(), "oib");
+        Assert.isTrue(korisnik.getOib().matches(Util.OIB_FORMAT), "OIB mora imati 11 znamenaka");
         if (korisnikRepository.countByOib(korisnik.getOib()) > 0) {
             throw new RequestDeniedException("Korisnik vec postoji");
         }
 
-//        Assert.isTrue(korisnikRepository.countByOib(korisnik.getOib()) == 0, "Korisnik vec postoji");
-        String oib = korisnik.getOib();
-        Assert.hasText(oib, "Korisnik mora imati OIB");
-        Assert.isTrue(oib.matches(OIB_FORMAT), "OIB mora imati 11 znamenaka");
         Assert.isTrue(creditCardNumberIsValid(korisnik.getBrojKreditneKartice()), "Broj kreditne kartice nije valjan.");
-        Assert.isTrue(korisnik.getEmail().matches(EMAIL_FORMAT), "Email nije valjan.");
+
+        Util.checkField(korisnik.getPasswordHash(), "password");
         korisnik.setPasswordHash(new BCryptPasswordEncoder().encode(korisnik.getPasswordHash()));
         return korisnikRepository.save(korisnik);
     }

@@ -1,8 +1,8 @@
 package hr.fer.opp.projekt.rest;
 
-import hr.fer.opp.projekt.domain.Korisnik;
-import hr.fer.opp.projekt.service.KorisnikService;
+import hr.fer.opp.projekt.domain.Tvrtka;
 import hr.fer.opp.projekt.service.RequestDeniedException;
+import hr.fer.opp.projekt.service.TvrtkaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,31 +12,33 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/korisnici")
-public class KorisnikController {
+@RequestMapping("/tvrtke")
+public class TvrtkaController {
 
     @Autowired
-    private KorisnikService korisnikService;
+    private TvrtkaService tvrtkaService;
 
     @GetMapping("")
     @Secured(Roles.ADMIN)
-    public List<Korisnik> listKorisnike() {
-        return korisnikService.listAll();
+    public List<Tvrtka> listTvrtke(){
+        return tvrtkaService.listAll();
     }
 
     @GetMapping("/{id}")
     @Secured({Roles.USER, Roles.ADMIN})
-    public Korisnik getKorisnik(@PathVariable("id") Long id, @AuthenticationPrincipal User u) {
-        Korisnik korisnik = korisnikService.fetchKorisnik(id);
-        if (korisnik.getEmail().equals(u.getUsername()) || "admin".equals(u.getUsername())) {
-            return korisnik;
+    public Tvrtka getTvrtka(@PathVariable("id") Long id, @AuthenticationPrincipal User u){
+        Tvrtka tvrtka = tvrtkaService.fetchTvrtka(id);
+        if (tvrtka.getEmail().equals(u.getUsername()) || "admin".equals(u.getUsername())) {
+            return tvrtka;
         } else {
             throw new RequestDeniedException("You do not have permission to view this user.");
         }
+
     }
 
     @PostMapping("")
-    public Korisnik createKorisnik(@RequestBody Korisnik korisnik) {
-        return korisnikService.createKorisnik(korisnik);
+    public Tvrtka createTvrtka(@RequestBody Tvrtka tvrtka){
+        return tvrtkaService.createTvrtka(tvrtka);
     }
+
 }
