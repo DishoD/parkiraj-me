@@ -1,8 +1,10 @@
 package hr.fer.opp.projekt.service.impl;
 
 import hr.fer.opp.projekt.dao.AutomobilRepository;
+import hr.fer.opp.projekt.dao.KorisnikRepository;
 import hr.fer.opp.projekt.domain.Automobil;
 import hr.fer.opp.projekt.domain.Korisnik;
+import hr.fer.opp.projekt.rest.DodajAutomobilDTO;
 import hr.fer.opp.projekt.service.AutomobilService;
 import hr.fer.opp.projekt.service.EntityMissingException;
 import hr.fer.opp.projekt.service.KorisnikService;
@@ -20,6 +22,12 @@ public class AutomobilServiceJpa implements AutomobilService {
 
     @Autowired
     private AutomobilRepository automobilRepository;
+
+    @Autowired
+    private KorisnikService korisnikService;
+
+    @Autowired
+    private KorisnikRepository korisnikRepository;
 
     @Override
     public List<Automobil> listAll() {
@@ -39,18 +47,28 @@ public class AutomobilServiceJpa implements AutomobilService {
                 () -> new EntityMissingException(Automobil.class, registracija)
         );
     }
+//
+//    @Override
+//    public Automobil createAutomobil(Automobil auto) {
+//        Assert.notNull(auto.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
+//        Assert.hasText(auto.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
+//        Assert.isNull(auto.getId(), "ID automobila se generira automatski.");
+//        //Assert.notNull(auto.getKorisnikID(), "Vlasnik ne postoji");   //ova provjera mozda nije potrebna?
+//        if (automobilRepository.findByRegistracijskaOznaka(auto.getRegistracijskaOznaka()).isPresent()) {
+//            throw new RequestDeniedException("Automobil je vec registriran.");
+//        }
+////        Assert.isTrue(auto.getRegistracijskaOznaka().matches(REG_FORMAT)); //trenutno
+//        return automobilRepository.save(auto);
+//    }
 
     @Override
-    public Automobil createAutomobil(Automobil auto) {
-        Assert.notNull(auto.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
-        Assert.hasText(auto.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
-        Assert.isNull(auto.getId(), "ID automobila se generira automatski.");
-        //Assert.notNull(auto.getKorisnikID(), "Vlasnik ne postoji");   //ova provjera mozda nije potrebna?
-        if (automobilRepository.findByRegistracijskaOznaka(auto.getRegistracijskaOznaka()).isPresent()) {
-            throw new RequestDeniedException("Automobil je vec registriran.");
-        }
-//        Assert.isTrue(auto.getRegistracijskaOznaka().matches(REG_FORMAT)); //trenutno
-        return automobilRepository.save(auto);
+    public Automobil createAutomobil(DodajAutomobilDTO automobilDTO) {
+        Automobil automobil =  new Automobil(automobilDTO.getRegistracijskaOznaka(), automobilDTO.getIme());
+        Korisnik korisnik = korisnikService.fetchKorisnik(automobilDTO.getKorisnikID());
+        korisnik.getAutomobili().add(automobil);
+        automobilRepository.save(automobil);
+        korisnikRepository.save(korisnik);
+        return automobil;
     }
 
     @Override

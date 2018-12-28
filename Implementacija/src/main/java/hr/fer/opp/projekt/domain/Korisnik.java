@@ -35,7 +35,7 @@ public class Korisnik {
     @NotNull
     private String passwordHash;
 
-    @OneToMany(mappedBy = "korisnik")
+    @OneToMany
     private Set<Automobil> automobili;
 
 

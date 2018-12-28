@@ -2,6 +2,7 @@ package hr.fer.opp.projekt.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -13,9 +14,9 @@ public class Automobil {
     @Column(name = "automobil_ID")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "korisnik_ID")
-    private Korisnik korisnik;
+//    @ManyToOne
+//    @JoinColumn(name = "korisnik_ID")
+//    private Korisnik korisnik;
 
     @Column(unique = true)
     @NotNull
@@ -27,18 +28,27 @@ public class Automobil {
     @OneToMany(mappedBy = "automobil")
     private Set<Rezervacija> rezervacije;
 
+    public Automobil(){
+
+    }
+
+    public Automobil(String registracijskaOznaka, String ime) {
+        this.registracijskaOznaka = registracijskaOznaka;
+        this.ime = ime;
+        this.rezervacije = new HashSet<>();
+    }
 
     public Long getId() {
         return id;
     }
-
-    public Korisnik getKorisnik() {
-        return korisnik;
-    }
-
-    public void setKorisnik(Korisnik korisnik) {
-        this.korisnik = korisnik;
-    }
+//
+//    public Korisnik getKorisnik() {
+//        return korisnik;
+//    }
+//
+//    public void setKorisnik(Korisnik korisnik) {
+//        this.korisnik = korisnik;
+//    }
 
     public String getRegistracijskaOznaka() {
         return registracijskaOznaka;

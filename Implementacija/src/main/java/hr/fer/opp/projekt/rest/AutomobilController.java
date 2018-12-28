@@ -18,9 +18,6 @@ public class AutomobilController {
     @Autowired
     private AutomobilService automobilService;
 
-    @Autowired
-    private KorisnikService korisnikService;
-
 
     @GetMapping("")
     @Secured(Roles.ADMIN)
@@ -30,8 +27,8 @@ public class AutomobilController {
 
     @PostMapping("")
     @Secured(Roles.USER)
-    public Automobil createAutomobil(@RequestBody Automobil automobil) {
-        return automobilService.createAutomobil(automobil);
+    public Automobil createAutomobil(@RequestBody DodajAutomobilDTO automobilDTO) {
+        return automobilService.createAutomobil(automobilDTO);
     }
 
 
