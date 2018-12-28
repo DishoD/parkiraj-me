@@ -14,9 +14,8 @@ public class Automobil {
     @Column(name = "automobil_ID")
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "korisnik_ID")
-//    private Korisnik korisnik;
+    @NotNull
+    private Long korisnikID;
 
     @Column(unique = true)
     @NotNull
@@ -32,23 +31,16 @@ public class Automobil {
 
     }
 
-    public Automobil(String registracijskaOznaka, String ime) {
+    public Automobil(String registracijskaOznaka, String ime, Long korisnikID) {
         this.registracijskaOznaka = registracijskaOznaka;
         this.ime = ime;
+        this.korisnikID = korisnikID;
         this.rezervacije = new HashSet<>();
     }
 
     public Long getId() {
         return id;
     }
-//
-//    public Korisnik getKorisnik() {
-//        return korisnik;
-//    }
-//
-//    public void setKorisnik(Korisnik korisnik) {
-//        this.korisnik = korisnik;
-//    }
 
     public String getRegistracijskaOznaka() {
         return registracijskaOznaka;
@@ -72,5 +64,13 @@ public class Automobil {
 
     public void setRezervacije(Set<Rezervacija> rezervacije) {
         this.rezervacije = rezervacije;
+    }
+
+    public Long getKorisnikID() {
+        return korisnikID;
+    }
+
+    public void setKorisnikID(Long korisnikID) {
+        this.korisnikID = korisnikID;
     }
 }

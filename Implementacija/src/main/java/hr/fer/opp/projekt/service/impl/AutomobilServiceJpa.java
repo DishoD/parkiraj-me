@@ -47,23 +47,21 @@ public class AutomobilServiceJpa implements AutomobilService {
                 () -> new EntityMissingException(Automobil.class, registracija)
         );
     }
-//
-//    @Override
-//    public Automobil createAutomobil(Automobil auto) {
-//        Assert.notNull(auto.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
-//        Assert.hasText(auto.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
-//        Assert.isNull(auto.getId(), "ID automobila se generira automatski.");
-//        //Assert.notNull(auto.getKorisnikID(), "Vlasnik ne postoji");   //ova provjera mozda nije potrebna?
-//        if (automobilRepository.findByRegistracijskaOznaka(auto.getRegistracijskaOznaka()).isPresent()) {
-//            throw new RequestDeniedException("Automobil je vec registriran.");
-//        }
-////        Assert.isTrue(auto.getRegistracijskaOznaka().matches(REG_FORMAT)); //trenutno
-//        return automobilRepository.save(auto);
-//    }
 
     @Override
     public Automobil createAutomobil(DodajAutomobilDTO automobilDTO) {
-        Automobil automobil =  new Automobil(automobilDTO.getRegistracijskaOznaka(), automobilDTO.getIme());
+        Assert.notNull(automobilDTO.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
+        Assert.hasText(automobilDTO.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
+//        if (automobilRepository.findByRegistracijskaOznaka(automobilDTO.getRegistracijskaOznaka()).isPresent()) {
+//            throw new RequestDeniedException("Automobil je vec registriran.");
+//        }
+
+        //ne znam koje errore da koristim jer bacanje RequestDenied pljuje trace u odgovor.
+        Assert.isTrue(!automobilRepository.findByRegistracijskaOznaka(automobilDTO.getRegistracijskaOznaka()).isPresent(),
+                "Automobil je vec registriran.");
+//        Assert.isTrue(auto.getRegistracijskaOznaka().matches(REG_FORMAT)); //
+
+        Automobil automobil =  new Automobil(automobilDTO.getRegistracijskaOznaka(), automobilDTO.getIme(), automobilDTO.getKorisnikID());
         Korisnik korisnik = korisnikService.fetchKorisnik(automobilDTO.getKorisnikID());
         korisnik.getAutomobili().add(automobil);
         automobilRepository.save(automobil);
