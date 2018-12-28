@@ -12,9 +12,8 @@ public class Rezervacija {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "automobil_ID")
-    private Automobil automobil;
+    @NotNull
+    private Long automobilID;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -27,18 +26,9 @@ public class Rezervacija {
     @NotNull
     private boolean trajnaRezervacija;
 
-    @ManyToOne
-    @JoinColumn(name = "parkiraliste_ID")
-    private Parkiraliste parkiraliste;
+    @NotNull
+    private Long parkiraliste;
 
-
-    public Automobil getAutomobil() {
-        return automobil;
-    }
-
-    public void setAutomobil(Automobil automobil) {
-        this.automobil = automobil;
-    }
 
     public Date getVrijemePocetka() {
         return vrijemePocetka;

@@ -9,14 +9,10 @@ import java.util.Set;
 @Table(name = "automobil")
 public class Automobil {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "automobil_ID")
-    private Long id;
-
     @NotNull
     private Long korisnikID;
 
+    @Id
     @Column(unique = true)
     @NotNull
     private String registracijskaOznaka;
@@ -24,7 +20,7 @@ public class Automobil {
     @NotNull
     private String ime;
 
-    @OneToMany(mappedBy = "automobil")
+    @OneToMany
     private Set<Rezervacija> rezervacije;
 
     public Automobil(){
@@ -38,9 +34,6 @@ public class Automobil {
         this.rezervacije = new HashSet<>();
     }
 
-    public Long getId() {
-        return id;
-    }
 
     public String getRegistracijskaOznaka() {
         return registracijskaOznaka;

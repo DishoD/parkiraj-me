@@ -32,7 +32,7 @@ public class Tvrtka {
     @NotNull
     private String passwordHash;
 
-    @OneToMany(mappedBy = "tvrtka")
+    @OneToMany
     private Set<Parkiraliste> parkiralista;
 
 

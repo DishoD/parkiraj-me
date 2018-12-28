@@ -13,9 +13,8 @@ public class Parkiraliste {
     @Column(name = "parkiraliste_ID")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "tvrtka_ID")
-    private Tvrtka tvrtka;
+    @NotNull
+    private Long tvrtkaID;
 
     @NotNull
     private String ime;
@@ -35,14 +34,6 @@ public class Parkiraliste {
 
     public Long getId() {
         return id;
-    }
-
-    public Tvrtka getTvrtka() {
-        return tvrtka;
-    }
-
-    public void setTvrtka(Tvrtka tvrtka) {
-        this.tvrtka = tvrtka;
     }
 
     public String getIme() {
