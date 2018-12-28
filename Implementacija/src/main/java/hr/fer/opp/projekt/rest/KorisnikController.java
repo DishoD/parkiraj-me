@@ -1,5 +1,6 @@
 package hr.fer.opp.projekt.rest;
 
+import hr.fer.opp.projekt.domain.Automobil;
 import hr.fer.opp.projekt.domain.Korisnik;
 import hr.fer.opp.projekt.service.KorisnikService;
 import hr.fer.opp.projekt.service.RequestDeniedException;
