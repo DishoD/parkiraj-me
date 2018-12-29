@@ -2,12 +2,11 @@ package hr.fer.opp.projekt.rest;
 
 import hr.fer.opp.projekt.domain.Korisnik;
 import hr.fer.opp.projekt.service.KorisnikService;
-import hr.fer.opp.projekt.service.RequestDeniedException;
+import hr.fer.opp.projekt.service.exceptions.RequestDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,10 +27,12 @@ public class KorisnikController {
     @GetMapping("/{id}")
     @Secured({Roles.USER, Roles.ADMIN})
     public Korisnik getKorisnik(@PathVariable("id") Long id, @AuthenticationPrincipal User u) {
-        if (u.getAuthorities().containsAll(Roles.userAuthority)) {
-            Assert.isTrue(id.equals(korisnikService.fetchKorisnik(u.getUsername()).getId()), "Nemate pravo na ovog korisnika.");
+        Korisnik korisnik = korisnikService.fetchKorisnik(id);
+        if (korisnik.getEmail().equals(u.getUsername()) || "admin".equals(u.getUsername())) {
+            return korisnik;
+        } else {
+            throw new RequestDeniedException("You do not have permission to view this user.");
         }
-        return korisnikService.fetchKorisnik(id);
     }
 
     @PostMapping("")

@@ -2,9 +2,9 @@ package hr.fer.opp.projekt.service.impl;
 
 import hr.fer.opp.projekt.dao.KorisnikRepository;
 import hr.fer.opp.projekt.domain.Korisnik;
-import hr.fer.opp.projekt.service.EntityMissingException;
+import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
 import hr.fer.opp.projekt.service.KorisnikService;
-import hr.fer.opp.projekt.service.RequestDeniedException;
+import hr.fer.opp.projekt.service.exceptions.RequestDeniedException;
 import hr.fer.opp.projekt.service.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

@@ -1,4 +1,4 @@
-package hr.fer.opp.projekt.service;
+package hr.fer.opp.projekt.service.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

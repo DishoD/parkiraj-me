@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface AutomobilService {
     List<Automobil> listAll();
 
-    List<Automobil> listByUserID(Long korisnikID);
+//    Automobil createAutomobil(Automobil automobil);
 
     Automobil createAutomobil(DodajAutomobilDTO automobilDTO);
 

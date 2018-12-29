@@ -24,11 +24,29 @@ public class Rezervacija {
     private Date vrijemeKraja;
 
     @NotNull
-    private boolean trajnaRezervacija;
+    private Long parkiralisteID;
 
-    @NotNull
-    private Long parkiraliste;
 
+    public Rezervacija() {
+
+    }
+
+    public Rezervacija(Long id, Long automobilID, Long parkiralisteID,
+                       Date vrijemePocetka, Date vrijemeKraja) {
+        this.id = id;
+        this.automobilID = automobilID;
+        this.parkiralisteID = parkiralisteID;
+        this.vrijemePocetka = vrijemePocetka;
+        this.vrijemeKraja = vrijemeKraja;
+    }
+
+    public Long getParkiralisteID() { return parkiralisteID; }
+
+    public void setParkiralisteID(Long parkiralisteID) { this.parkiralisteID = parkiralisteID; }
+
+    public Long getAutomobilID() { return automobilID; }
+
+    public void setAutomobilID(Long automobilID) { this.automobilID = automobilID; }
 
     public Date getVrijemePocetka() {
         return vrijemePocetka;
@@ -46,11 +64,4 @@ public class Rezervacija {
         this.vrijemeKraja = vrijemeKraja;
     }
 
-    public boolean isTrajnaRezervacija() {
-        return trajnaRezervacija;
-    }
-
-    public void setTrajnaRezervacija(boolean trajnaRezervacija) {
-        this.trajnaRezervacija = trajnaRezervacija;
-    }
 }

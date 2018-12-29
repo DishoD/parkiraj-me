@@ -2,8 +2,8 @@ package hr.fer.opp.projekt.service.impl;
 
 import hr.fer.opp.projekt.dao.TvrtkaRepository;
 import hr.fer.opp.projekt.domain.Tvrtka;
-import hr.fer.opp.projekt.service.EntityMissingException;
-import hr.fer.opp.projekt.service.RequestDeniedException;
+import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
+import hr.fer.opp.projekt.service.exceptions.RequestDeniedException;
 import hr.fer.opp.projekt.service.TvrtkaService;
 import hr.fer.opp.projekt.service.Util;
 import org.springframework.beans.factory.annotation.Autowired;

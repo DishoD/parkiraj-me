@@ -1,7 +1,7 @@
 package hr.fer.opp.projekt.rest;
 
 import hr.fer.opp.projekt.domain.Tvrtka;
-import hr.fer.opp.projekt.service.RequestDeniedException;
+import hr.fer.opp.projekt.service.exceptions.RequestDeniedException;
 import hr.fer.opp.projekt.service.TvrtkaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
