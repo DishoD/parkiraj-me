@@ -9,11 +9,13 @@ import hr.fer.opp.projekt.service.RezervacijaService;
 import hr.fer.opp.projekt.service.AutomobilService;
 import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class RezervacijaServiceJpa implements RezervacijaService {
 
     @Autowired
@@ -41,13 +43,13 @@ public class RezervacijaServiceJpa implements RezervacijaService {
 
     @Override
     public Rezervacija createRezervacijaJednokratna(DodajRezervacijuJednokratnuDTO dto, Long korisnikID) {
-        Long rezervacijaId = dto.getId();
+        //Long rezervacijaId = dto.getId();
         Long parkingID = dto.getParkingID();
         Long autoID = dto.getAutoID();
         Date vrijemePoc = dto.getVrijemePocetka();
         Date trajanje = dto.getTrajanje();
 
-        Assert.notNull(rezervacijaId, "Potrebno je predati ID rezervacije.");
+        //Assert.notNull(rezervacijaId, "Potrebno je predati ID rezervacije.");
         Assert.notNull(vrijemePoc, "Potrebno je predati vrijeme pocetka rezervacije.");
         Assert.notNull(trajanje, "Potrebno je predati trajanje rezervacije.");
         Assert.notNull(autoID, "Potrebno je predati ID automobila.");

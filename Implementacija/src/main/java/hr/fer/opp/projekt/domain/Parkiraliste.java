@@ -28,9 +28,11 @@ public class Parkiraliste {
     @NotNull
     private Integer cijena;
 
-    @OneToMany(mappedBy = "parkiraliste")
+    @OneToMany
     private Set<Rezervacija> rezervacije;
 
+
+    public void setId(Long id) { this.id = id; }
 
     public Long getId() {
         return id;
@@ -75,4 +77,8 @@ public class Parkiraliste {
     public void setRezervacije(Set<Rezervacija> rezervacije) {
         this.rezervacije = rezervacije;
     }
+
+    public Long getTvrtkaID() { return tvrtkaID; }
+
+    public void setTvrtkaID(Long tvrtkaID) { this.tvrtkaID = tvrtkaID; }
 }

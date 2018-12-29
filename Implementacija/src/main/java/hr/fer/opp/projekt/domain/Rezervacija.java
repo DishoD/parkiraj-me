@@ -63,4 +63,5 @@ public class Rezervacija {
         this.vrijemeKraja = vrijemeKraja;
     }
 
+    public Long getId() { return id; }
 }
