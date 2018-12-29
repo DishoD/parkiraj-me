@@ -1,5 +1,7 @@
 package hr.fer.opp.projekt.rest;
 
+import hr.fer.opp.projekt.service.EntityMissingException;
+import hr.fer.opp.projekt.service.RequestDeniedException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -15,7 +17,7 @@ import java.util.Map;
 @ControllerAdvice
 public class RestExceptionHandler {
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler({IllegalArgumentException.class, EntityMissingException.class, RequestDeniedException.class})
     protected ResponseEntity<?> handleIllegalArgument(Exception e, WebRequest req) {
         Map<String, String> props = new HashMap<>();
         props.put("message", e.getMessage());

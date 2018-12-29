@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,12 +28,10 @@ public class KorisnikController {
     @GetMapping("/{id}")
     @Secured({Roles.USER, Roles.ADMIN})
     public Korisnik getKorisnik(@PathVariable("id") Long id, @AuthenticationPrincipal User u) {
-        Korisnik korisnik = korisnikService.fetchKorisnik(id);
-        if (korisnik.getEmail().equals(u.getUsername()) || "admin".equals(u.getUsername())) {
-            return korisnik;
-        } else {
-            throw new RequestDeniedException("You do not have permission to view this user.");
+        if (u.getAuthorities().containsAll(Roles.userAuthority)) {
+            Assert.isTrue(id.equals(korisnikService.fetchKorisnik(u.getUsername()).getId()), "Nemate pravo na ovog korisnika.");
         }
+        return korisnikService.fetchKorisnik(id);
     }
 
     @PostMapping("")
