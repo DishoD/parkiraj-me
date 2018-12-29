@@ -4,7 +4,7 @@ import hr.fer.opp.projekt.dao.AutomobilRepository;
 import hr.fer.opp.projekt.dao.KorisnikRepository;
 import hr.fer.opp.projekt.domain.Automobil;
 import hr.fer.opp.projekt.domain.Korisnik;
-import hr.fer.opp.projekt.rest.DodajAutomobilDTO;
+import hr.fer.opp.projekt.rest.dto.DodajAutomobilDTO;
 import hr.fer.opp.projekt.service.AutomobilService;
 import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
 import hr.fer.opp.projekt.service.KorisnikService;
@@ -35,6 +35,11 @@ public class AutomobilServiceJpa implements AutomobilService {
     }
 
     @Override
+    public List<Automobil> listByUserID(Long korisnikID) {
+        return automobilRepository.findAllByKorisnikID(korisnikID);
+    }
+
+    @Override
     public Automobil fetch(Long automobilId) {
         return automobilRepository.findById(automobilId).orElseThrow(
                 () -> new EntityMissingException(Automobil.class, automobilId)
@@ -52,11 +57,7 @@ public class AutomobilServiceJpa implements AutomobilService {
     public Automobil createAutomobil(DodajAutomobilDTO automobilDTO) {
         Assert.notNull(automobilDTO.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
         Assert.hasText(automobilDTO.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
-//        if (automobilRepository.findByRegistracijskaOznaka(automobilDTO.getRegistracijskaOznaka()).isPresent()) {
-//            throw new RequestDeniedException("Automobil je vec registriran.");
-//        }
 
-        //ne znam koje errore da koristim jer bacanje RequestDenied pljuje trace u odgovor.
         Assert.isTrue(!automobilRepository.findByRegistracijskaOznaka(automobilDTO.getRegistracijskaOznaka()).isPresent(),
                 "Automobil je vec registriran.");
 //        Assert.isTrue(auto.getRegistracijskaOznaka().matches(REG_FORMAT)); //

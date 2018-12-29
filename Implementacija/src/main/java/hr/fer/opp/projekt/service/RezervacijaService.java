@@ -1,7 +1,7 @@
 package hr.fer.opp.projekt.service;
 
 import hr.fer.opp.projekt.domain.Rezervacija;
-import hr.fer.opp.projekt.rest.DodajRezervacijuJednokratnuDTO;
+import hr.fer.opp.projekt.rest.dto.DodajRezervacijuJednokratnuDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

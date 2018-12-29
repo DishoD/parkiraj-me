@@ -31,9 +31,8 @@ public class Rezervacija {
 
     }
 
-    public Rezervacija(Long id, Long automobilID, Long parkiralisteID,
+    public Rezervacija(Long automobilID, Long parkiralisteID,
                        Date vrijemePocetka, Date vrijemeKraja) {
-        this.id = id;
         this.automobilID = automobilID;
         this.parkiralisteID = parkiralisteID;
         this.vrijemePocetka = vrijemePocetka;

@@ -1,4 +1,4 @@
-package hr.fer.opp.projekt.rest;
+package hr.fer.opp.projekt.rest.dto;
 
 import java.util.Date;
 

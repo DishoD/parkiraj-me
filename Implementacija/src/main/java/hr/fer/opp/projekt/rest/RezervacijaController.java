@@ -1,6 +1,7 @@
 package hr.fer.opp.projekt.rest;
 
 import hr.fer.opp.projekt.domain.Rezervacija;
+import hr.fer.opp.projekt.rest.dto.DodajRezervacijuJednokratnuDTO;
 import hr.fer.opp.projekt.service.RezervacijaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;

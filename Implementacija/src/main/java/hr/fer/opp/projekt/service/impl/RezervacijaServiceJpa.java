@@ -4,10 +4,10 @@ import hr.fer.opp.projekt.dao.AutomobilRepository;
 import hr.fer.opp.projekt.dao.ParkiralisteRepository;
 import hr.fer.opp.projekt.dao.RezervacijaRepository;
 import hr.fer.opp.projekt.domain.Rezervacija;
-import hr.fer.opp.projekt.rest.DodajRezervacijuJednokratnuDTO;
+import hr.fer.opp.projekt.rest.dto.DodajRezervacijuJednokratnuDTO;
+import hr.fer.opp.projekt.service.RezervacijaService;
 import hr.fer.opp.projekt.service.AutomobilService;
 import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
-import hr.fer.opp.projekt.service.RezervacijaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
@@ -57,7 +57,7 @@ public class RezervacijaServiceJpa implements RezervacijaService {
         String vlasnikID = automobilService.fetch(autoID).getIme();
         Assert.isTrue(korisnikID.equals(vlasnikID));
 
-        Rezervacija nova = new Rezervacija(rezervacijaId, autoID, parkingID, vrijemePoc,  trajanje);
+        Rezervacija nova = new Rezervacija(autoID, parkingID, vrijemePoc,  trajanje);
         rezervacijaRepository.save(nova);
         return nova;
     }
