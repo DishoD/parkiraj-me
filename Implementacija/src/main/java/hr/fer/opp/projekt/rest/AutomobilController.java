@@ -1,7 +1,6 @@
 package hr.fer.opp.projekt.rest;
 
 import hr.fer.opp.projekt.domain.Automobil;
-import hr.fer.opp.projekt.rest.dto.DodajAutomobilDTO;
 import hr.fer.opp.projekt.service.AutomobilService;
 import hr.fer.opp.projekt.service.KorisnikService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +40,8 @@ public class AutomobilController {
 
     @PostMapping("")
     @Secured(Roles.USER)
-    public Automobil createAutomobil(@RequestBody DodajAutomobilDTO automobilDTO) {
-        return automobilService.createAutomobil(automobilDTO);
+    public Automobil createAutomobil(@RequestBody Automobil automobil) {
+        return automobilService.createAutomobil(automobil);
     }
 
 

@@ -1,7 +1,9 @@
 package hr.fer.opp.projekt.rest;
 
 import hr.fer.opp.projekt.domain.Korisnik;
+import hr.fer.opp.projekt.domain.Tvrtka;
 import hr.fer.opp.projekt.service.KorisnikService;
+import hr.fer.opp.projekt.service.TvrtkaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.User;
@@ -21,6 +23,9 @@ public class KorisnikUserDetailsService implements UserDetailsService {
     @Autowired
     private KorisnikService korisnikService;
 
+    @Autowired
+    private TvrtkaService tvrtkaService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if ("admin".equals(username))
@@ -28,6 +33,10 @@ public class KorisnikUserDetailsService implements UserDetailsService {
         else if (korisnikService.containsKorisnik(username)) {
             Korisnik korisnik = korisnikService.fetchKorisnik(username);
             return new User(username, korisnik.getPasswordHash(), commaSeparatedStringToAuthorityList(Roles.USER));
+        }
+        else if(tvrtkaService.containsTvrtka(username)){
+            Tvrtka tvrtka = tvrtkaService.fetchTvrtka(username);
+            return new User(username, tvrtka.getPasswordHash(), commaSeparatedStringToAuthorityList(Roles.COMPANY));
         }
         else throw new UsernameNotFoundException("Ne postoji korisnik: " + username);
     }

@@ -4,7 +4,6 @@ import hr.fer.opp.projekt.dao.AutomobilRepository;
 import hr.fer.opp.projekt.dao.KorisnikRepository;
 import hr.fer.opp.projekt.domain.Automobil;
 import hr.fer.opp.projekt.domain.Korisnik;
-import hr.fer.opp.projekt.rest.dto.DodajAutomobilDTO;
 import hr.fer.opp.projekt.service.AutomobilService;
 import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
 import hr.fer.opp.projekt.service.KorisnikService;
@@ -54,16 +53,15 @@ public class AutomobilServiceJpa implements AutomobilService {
     }
 
     @Override
-    public Automobil createAutomobil(DodajAutomobilDTO automobilDTO) {
-        Assert.notNull(automobilDTO.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
-        Assert.hasText(automobilDTO.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
+    public Automobil createAutomobil(Automobil automobil) {
+        Assert.notNull(automobil.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
+        Assert.hasText(automobil.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
 
-        Assert.isTrue(!automobilRepository.findByRegistracijskaOznaka(automobilDTO.getRegistracijskaOznaka()).isPresent(),
+        Assert.isTrue(!automobilRepository.findByRegistracijskaOznaka(automobil.getRegistracijskaOznaka()).isPresent(),
                 "Automobil je vec registriran.");
 //        Assert.isTrue(auto.getRegistracijskaOznaka().matches(REG_FORMAT)); //
 
-        Automobil automobil =  new Automobil(automobilDTO.getRegistracijskaOznaka(), automobilDTO.getIme(), automobilDTO.getKorisnikID());
-        Korisnik korisnik = korisnikService.fetchKorisnik(automobilDTO.getKorisnikID());
+        Korisnik korisnik = korisnikService.fetchKorisnik(automobil.getKorisnikID());
         korisnik.getAutomobili().add(automobil);
         automobilRepository.save(automobil);
         korisnikRepository.save(korisnik);
