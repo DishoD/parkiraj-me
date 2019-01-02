@@ -1,0 +1,22 @@
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+}
+
+.reg-btn {
+    margin: 5px;
+    display: compact;
+}
+
+.reg-choose {
+    margin: 5px;
+    padding: 5px;
+
+    border-color: rgba(0,0,0,0.19);
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
