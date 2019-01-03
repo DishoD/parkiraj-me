@@ -15,6 +15,8 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
+import static hr.fer.opp.projekt.service.Util.REG_FORMAT;
+
 @Service
 public class AutomobilServiceJpa implements AutomobilService {
 
@@ -58,7 +60,7 @@ public class AutomobilServiceJpa implements AutomobilService {
 
         Assert.isTrue(!automobilRepository.findByRegistracijskaOznaka(automobil.getRegistracijskaOznaka()).isPresent(),
                 "Automobil je vec registriran.");
-//        Assert.isTrue(auto.getRegistracijskaOznaka().matches(REG_FORMAT)); //
+        Assert.isTrue(automobil.getRegistracijskaOznaka().matches(REG_FORMAT)); //
 
         Korisnik korisnik = korisnikService.fetchKorisnik(automobil.getKorisnikID());
         korisnik.getAutomobili().add(automobil);
@@ -70,7 +72,7 @@ public class AutomobilServiceJpa implements AutomobilService {
     @Override
     public Automobil updateAutomobilRegistracija(Long id, String novaRegistracija) {
         Assert.hasText(novaRegistracija, "Potrebno je unijeti registraciju automobila.");
-        Assert.isTrue(novaRegistracija.matches(Util.REG_FORMAT));
+        Assert.isTrue(novaRegistracija.matches(REG_FORMAT));
         if (automobilRepository.findByRegistracijskaOznaka(novaRegistracija).isPresent()) {
             throw new RequestDeniedException("Automobil je vec registriran.");
         }

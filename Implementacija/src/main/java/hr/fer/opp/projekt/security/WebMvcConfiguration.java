@@ -1,4 +1,4 @@
-package hr.fer.opp.projekt.rest;
+package hr.fer.opp.projekt.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

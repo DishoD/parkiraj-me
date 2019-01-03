@@ -1,31 +1,34 @@
 package hr.fer.opp.projekt.rest;
 
+import hr.fer.opp.projekt.domain.Korisnik;
+import hr.fer.opp.projekt.service.KorisnikService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@RestController
 @RequestMapping("/")
 public class DefaultController {
-//    @RequestMapping(value = "/login", method = RequestMethod.GET)
+
+    @Autowired
+    private KorisnikService korisnikService;
+
     @GetMapping("/login")
     public ModelAndView loginPage() {
-        System.out.println("mapping is used");
         ModelAndView mv = new ModelAndView();
         mv.setViewName("login");
 
         return mv;
     }
 
-    @GetMapping("")
-    public String homePage() {
-        System.out.println("is also used");
-        return "success";
-    }
-
     @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password) {
-        System.out.println("got username: " + username + " and password " + password);
-        return "got username: " + username + " and password " + password;
+    public Korisnik login(@RequestParam String username) {
+        return korisnikService.fetchKorisnik(username);
     }
 }

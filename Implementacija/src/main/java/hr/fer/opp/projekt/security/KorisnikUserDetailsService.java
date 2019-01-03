@@ -1,7 +1,8 @@
-package hr.fer.opp.projekt.rest;
+package hr.fer.opp.projekt.security;
 
 import hr.fer.opp.projekt.domain.Korisnik;
 import hr.fer.opp.projekt.domain.Tvrtka;
+import hr.fer.opp.projekt.rest.Roles;
 import hr.fer.opp.projekt.service.KorisnikService;
 import hr.fer.opp.projekt.service.TvrtkaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,6 @@ public class KorisnikUserDetailsService implements UserDetailsService {
             return new User(username, "{bcrypt}" + adminPasswordHash, commaSeparatedStringToAuthorityList(Roles.ADMIN));
         else if (korisnikService.containsKorisnik(username)) {
             Korisnik korisnik = korisnikService.fetchKorisnik(username);
-            System.out.println("pronaden korisnik: " + korisnik.getPasswordHash());
             return new User(username, "{bcrypt}" + korisnik.getPasswordHash(), commaSeparatedStringToAuthorityList(Roles.USER));
         }
         else if(tvrtkaService.containsTvrtka(username)){

@@ -1,4 +1,4 @@
-package hr.fer.opp.projekt.rest;
+package hr.fer.opp.projekt.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -30,6 +30,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
+                .successForwardUrl("/login?success")
                 .loginPage("/login")
                 .permitAll()
                 .and()

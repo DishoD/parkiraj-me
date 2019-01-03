@@ -1,4 +1,4 @@
-package hr.fer.opp.projekt.rest;
+package hr.fer.opp.projekt.security;
 
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;

@@ -69,20 +69,11 @@ public class KorisnikServiceJpa implements KorisnikService {
 
     //dummy CC broj koji prolazi provjeru: 54372012565022
     private boolean creditCardNumberIsValid(String ccNumber) {
-        int sum = 0;
-        boolean alternate = false;
-        for (int i = ccNumber.length() - 1; i >= 0; i--) {
-            int n = Integer.parseInt(ccNumber.substring(i, i + 1));
-            if (alternate) {
-                n *= 2;
-                if (n > 9) {
-                    n = (n % 10) + 1;
-                }
-            }
-            sum += n;
-            alternate = !alternate;
+        if (ccNumber.length() < Util.MIN_CC_NUM_LEN || ccNumber.length() > Util.MAX_CC_NUM_LEN) return false;
+        for (char c : ccNumber.toCharArray()) {
+            if (!Character.isDigit(c)) return false;
         }
-        return (sum % 10 == 0);
+        return true;
     }
 
 }
