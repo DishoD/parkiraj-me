@@ -24,9 +24,9 @@ public class AutomobilController {
 
 
     @GetMapping("")
-    @Secured(Roles.ADMIN)
-    public List<Automobil> listAutomobil() {
-        return automobilService.listAll();
+    @Secured(Roles.USER)
+    public List<Automobil> listAutomobil(@AuthenticationPrincipal User u) {
+        return automobilService.listByUserID(korisnikService.fetchKorisnik(u.getUsername()).getId());
     }
 
     @GetMapping("/{korisnikID}")

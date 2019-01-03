@@ -7,6 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.Ordered;
 import org.springframework.data.repository.support.DomainClassConverter;
 import org.springframework.format.support.FormattingConversionService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -18,7 +20,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
 @EnableWebMvc
-@ComponentScan
+@ComponentScan("org.springframework.security.samples.mvc")
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
 	@Autowired
@@ -68,6 +70,11 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	@Bean
 	public DomainClassConverter<?> domainClassConverter() {
 		return new DomainClassConverter<>(mvcConversionService);
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 
