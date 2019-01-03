@@ -5,6 +5,7 @@ import hr.fer.opp.projekt.dao.KorisnikRepository;
 import hr.fer.opp.projekt.domain.Automobil;
 import hr.fer.opp.projekt.domain.Korisnik;
 import hr.fer.opp.projekt.service.AutomobilService;
+import hr.fer.opp.projekt.service.Util;
 import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
 import hr.fer.opp.projekt.service.KorisnikService;
 import hr.fer.opp.projekt.service.exceptions.RequestDeniedException;
@@ -16,8 +17,6 @@ import java.util.List;
 
 @Service
 public class AutomobilServiceJpa implements AutomobilService {
-
-    private static final String REG_FORMAT = "[A-Z]{2} [0-9]{3,4}-[A-Z]{1,2}";
 
     @Autowired
     private AutomobilRepository automobilRepository;
@@ -71,7 +70,7 @@ public class AutomobilServiceJpa implements AutomobilService {
     @Override
     public Automobil updateAutomobilRegistracija(Long id, String novaRegistracija) {
         Assert.hasText(novaRegistracija, "Potrebno je unijeti registraciju automobila.");
-        Assert.isTrue(novaRegistracija.matches(REG_FORMAT));
+        Assert.isTrue(novaRegistracija.matches(Util.REG_FORMAT));
         if (automobilRepository.findByRegistracijskaOznaka(novaRegistracija).isPresent()) {
             throw new RequestDeniedException("Automobil je vec registriran.");
         }
