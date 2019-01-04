@@ -41,4 +41,9 @@ public class TvrtkaController {
         return tvrtkaService.createTvrtka(tvrtka);
     }
 
+    @DeleteMapping("{email}")
+    @Secured(Roles.ADMIN)
+    public void deleteTvrtka(@PathVariable("email") String email) {
+        tvrtkaService.deleteTvrtka(email);
+    }
 }

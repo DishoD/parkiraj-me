@@ -1,7 +1,9 @@
 package hr.fer.opp.projekt.service.impl;
 
 import hr.fer.opp.projekt.dao.TvrtkaRepository;
+import hr.fer.opp.projekt.domain.Parkiraliste;
 import hr.fer.opp.projekt.domain.Tvrtka;
+import hr.fer.opp.projekt.service.ParkiralisteService;
 import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
 import hr.fer.opp.projekt.service.exceptions.RequestDeniedException;
 import hr.fer.opp.projekt.service.TvrtkaService;
@@ -11,13 +13,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class TvrtkaServiceJpa implements TvrtkaService {
 
     @Autowired
     private TvrtkaRepository tvrtkaRepository;
+
+    @Autowired
+    private ParkiralisteService parkiralisteService;
 
     @Override
     public List<Tvrtka> listAll() {
@@ -63,5 +70,22 @@ public class TvrtkaServiceJpa implements TvrtkaService {
     @Override
     public boolean containsTvrtka(String email) {
         return tvrtkaRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public Boolean deleteTvrtka(String email) {
+        Tvrtka tvrtka = fetchTvrtka(email);
+        Set<Parkiraliste> parkiralista = tvrtka.getParkiralista();
+
+        //so filthy, ugh
+        Set<Long> parkiralisteIDs = new HashSet<>();
+        for (Parkiraliste p : parkiralista) {
+            parkiralisteIDs.add(p.getId());
+        }
+        for (Long id : parkiralisteIDs) {
+            parkiralisteService.deleteParkiraliste(id, tvrtka.getId());
+        }
+        tvrtkaRepository.delete(tvrtka);
+        return true;
     }
 }

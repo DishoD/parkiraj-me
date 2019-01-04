@@ -1,12 +1,17 @@
 package hr.fer.opp.projekt.service.impl;
 
 import hr.fer.opp.projekt.dao.AutomobilRepository;
+import hr.fer.opp.projekt.dao.KorisnikRepository;
 import hr.fer.opp.projekt.dao.ParkiralisteRepository;
 import hr.fer.opp.projekt.dao.RezervacijaRepository;
+import hr.fer.opp.projekt.domain.Korisnik;
+import hr.fer.opp.projekt.domain.Parkiraliste;
 import hr.fer.opp.projekt.domain.Rezervacija;
 import hr.fer.opp.projekt.rest.dto.DodajRezervacijuJednokratnuDTO;
 import hr.fer.opp.projekt.rest.dto.DodajRezervacijuPonavljajucuDTO;
 import hr.fer.opp.projekt.rest.dto.DodajRezervacijuTrajnuDTO;
+import hr.fer.opp.projekt.service.KorisnikService;
+import hr.fer.opp.projekt.service.ParkiralisteService;
 import hr.fer.opp.projekt.service.RezervacijaService;
 import hr.fer.opp.projekt.service.AutomobilService;
 import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
@@ -27,6 +32,18 @@ public class RezervacijaServiceJpa implements RezervacijaService {
 
     @Autowired
     private RezervacijaRepository rezervacijaRepository;
+
+    @Autowired
+    private KorisnikService korisnikService;
+
+    @Autowired
+    private KorisnikRepository korisnikRepository;
+
+    @Autowired
+    private ParkiralisteRepository parkiralisteRepository;
+
+    @Autowired
+    private ParkiralisteService parkiralisteService;
 
     @Override
     public List<Rezervacija> listAll() {
@@ -53,7 +70,16 @@ public class RezervacijaServiceJpa implements RezervacijaService {
         Date vrijemeKraja = new Date(dto.getVrijemePocetka() + hoursToMilliseconds(trajanje));
 
         Rezervacija rezervacija = new Rezervacija(korisnikID, vrijemePocetka, vrijemeKraja, parkingID, false);
+
+        Korisnik korisnik = korisnikService.fetchKorisnik(korisnikID);
+        korisnik.getRezervacije().add(rezervacija);
+
+        Parkiraliste parkiraliste = parkiralisteService.fetchParkiraliste(parkingID);
+        parkiraliste.getRezervacije().add(rezervacija);
+
         rezervacijaRepository.save(rezervacija);
+        korisnikRepository.save(korisnik);
+        parkiralisteRepository.save(parkiraliste);
         return rezervacija;
     }
 

@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -39,7 +41,17 @@ public class ParkiralisteController {
 
     @PostMapping("")
     @Secured(Roles.COMPANY)
-    public Parkiraliste createParkiraliste(@RequestBody Parkiraliste parkiraliste){
+    public Parkiraliste createParkiraliste(@RequestParam("ime") String ime,
+                                           @RequestParam("lokacija") Double[] lokacija,
+                                           @RequestParam("kapacitet") Integer kapacitet,
+                                           @RequestParam("cijena") Integer cijena,
+                                           @AuthenticationPrincipal User u){
+        Parkiraliste parkiraliste = new Parkiraliste();
+        parkiraliste.setCijena(cijena);
+        parkiraliste.setIme(ime);
+        parkiraliste.setKapacitet(kapacitet);
+        parkiraliste.setLokacija(lokacija);
+        parkiraliste.setTvrtkaID(tvrtkaService.fetchTvrtka(u.getUsername()).getId());
         return parkiralisteService.createParkiraliste(parkiraliste);
     }
 

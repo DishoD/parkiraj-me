@@ -38,6 +38,9 @@ public class Korisnik {
     @OneToMany
     private Set<Automobil> automobili;
 
+    @OneToMany
+    private Set<Rezervacija> rezervacije;
+
 
     public Long getId() {
         return id;
@@ -97,5 +100,13 @@ public class Korisnik {
 
     public void setAutomobili(Set<Automobil> automobili) {
         this.automobili = automobili;
+    }
+
+    public Set<Rezervacija> getRezervacije() {
+        return rezervacije;
+    }
+
+    public void setRezervacije(Set<Rezervacija> rezervacije) {
+        this.rezervacije = rezervacije;
     }
 }

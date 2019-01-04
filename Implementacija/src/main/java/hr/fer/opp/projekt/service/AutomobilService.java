@@ -13,7 +13,7 @@ public interface AutomobilService {
 
     Automobil updateAutomobilRegistracija(Long id, String novaRegistracija);
 
-    Automobil deleteAutomobil(Long id);
+    Boolean deleteAutomobil(String registracija);
 
     Automobil fetch(Long automobilId);
 
