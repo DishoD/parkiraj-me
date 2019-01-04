@@ -1,7 +1,6 @@
 package hr.fer.opp.projekt.service;
 
 import hr.fer.opp.projekt.domain.Automobil;
-import hr.fer.opp.projekt.rest.dto.DodajAutomobilDTO;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ public interface AutomobilService {
 
     List<Automobil> listByUserID(Long korisnikID);
 
-    Automobil createAutomobil(DodajAutomobilDTO automobilDTO);
+    Automobil createAutomobil(Automobil automobil);
 
     Automobil updateAutomobilRegistracija(Long id, String novaRegistracija);
 

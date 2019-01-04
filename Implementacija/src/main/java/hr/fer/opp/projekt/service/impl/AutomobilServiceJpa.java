@@ -4,8 +4,8 @@ import hr.fer.opp.projekt.dao.AutomobilRepository;
 import hr.fer.opp.projekt.dao.KorisnikRepository;
 import hr.fer.opp.projekt.domain.Automobil;
 import hr.fer.opp.projekt.domain.Korisnik;
-import hr.fer.opp.projekt.rest.dto.DodajAutomobilDTO;
 import hr.fer.opp.projekt.service.AutomobilService;
+import hr.fer.opp.projekt.service.Util;
 import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
 import hr.fer.opp.projekt.service.KorisnikService;
 import hr.fer.opp.projekt.service.exceptions.RequestDeniedException;
@@ -15,10 +15,10 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
+import static hr.fer.opp.projekt.service.Util.REG_FORMAT;
+
 @Service
 public class AutomobilServiceJpa implements AutomobilService {
-
-    private static final String REG_FORMAT = "[A-Z]{2} [0-9]{3,4}-[A-Z]{1,2}";
 
     @Autowired
     private AutomobilRepository automobilRepository;
@@ -54,16 +54,15 @@ public class AutomobilServiceJpa implements AutomobilService {
     }
 
     @Override
-    public Automobil createAutomobil(DodajAutomobilDTO automobilDTO) {
-        Assert.notNull(automobilDTO.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
-        Assert.hasText(automobilDTO.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
+    public Automobil createAutomobil(Automobil automobil) {
+        Assert.notNull(automobil.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
+        Assert.hasText(automobil.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
 
-        Assert.isTrue(!automobilRepository.findByRegistracijskaOznaka(automobilDTO.getRegistracijskaOznaka()).isPresent(),
+        Assert.isTrue(!automobilRepository.findByRegistracijskaOznaka(automobil.getRegistracijskaOznaka()).isPresent(),
                 "Automobil je vec registriran.");
-//        Assert.isTrue(auto.getRegistracijskaOznaka().matches(REG_FORMAT)); //
+        Assert.isTrue(automobil.getRegistracijskaOznaka().matches(REG_FORMAT)); //
 
-        Automobil automobil =  new Automobil(automobilDTO.getRegistracijskaOznaka(), automobilDTO.getIme(), automobilDTO.getKorisnikID());
-        Korisnik korisnik = korisnikService.fetchKorisnik(automobilDTO.getKorisnikID());
+        Korisnik korisnik = korisnikService.fetchKorisnik(automobil.getKorisnikID());
         korisnik.getAutomobili().add(automobil);
         automobilRepository.save(automobil);
         korisnikRepository.save(korisnik);

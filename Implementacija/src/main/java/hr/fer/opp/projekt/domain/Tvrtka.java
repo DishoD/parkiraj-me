@@ -1,5 +1,8 @@
 package hr.fer.opp.projekt.domain;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -32,7 +35,7 @@ public class Tvrtka {
     @NotNull
     private String passwordHash;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Parkiraliste> parkiralista;
 
 
