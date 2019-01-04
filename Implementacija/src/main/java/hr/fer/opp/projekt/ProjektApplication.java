@@ -6,7 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.annotation.PostConstruct;
 import java.beans.BeanProperty;
+import java.util.TimeZone;
 
 @SpringBootApplication
 public class ProjektApplication {
@@ -14,6 +16,11 @@ public class ProjektApplication {
 	@Bean
 	public PasswordEncoder pswdEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@PostConstruct
+	void started() {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}
 
 	public static void main(String[] args) {
