@@ -1,8 +1,10 @@
 package hr.fer.opp.projekt.security;
 
+import hr.fer.opp.projekt.domain.Administrator;
 import hr.fer.opp.projekt.domain.Korisnik;
 import hr.fer.opp.projekt.domain.Tvrtka;
 import hr.fer.opp.projekt.rest.Roles;
+import hr.fer.opp.projekt.service.AdministratorService;
 import hr.fer.opp.projekt.service.KorisnikService;
 import hr.fer.opp.projekt.service.TvrtkaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +23,21 @@ import static org.springframework.security.core.authority.AuthorityUtils.commaSe
 @Service
 public class KorisnikUserDetailsService implements UserDetailsService {
 
-    @Value("${opp.admin.password}")
-    private String adminPasswordHash;
-
     @Autowired
     private KorisnikService korisnikService;
 
     @Autowired
     private TvrtkaService tvrtkaService;
 
+    @Autowired
+    private AdministratorService administratorService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if ("admin".equals(username))
-            return new User(username, "{bcrypt}" + adminPasswordHash, commaSeparatedStringToAuthorityList(Roles.ADMIN));
+        if (administratorService.containsAdministrator(username)){
+            Administrator administrator = administratorService.fetchAdministrator(username);
+            return new User(username, "{bcrypt}" + administrator.getPasswordHash(), commaSeparatedStringToAuthorityList(Roles.ADMIN));
+        }
         else if (korisnikService.containsKorisnik(username)) {
             Korisnik korisnik = korisnikService.fetchKorisnik(username);
             return new User(username, "{bcrypt}" + korisnik.getPasswordHash(), commaSeparatedStringToAuthorityList(Roles.USER));
