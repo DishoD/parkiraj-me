@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Navbar, Button, FormGroup, FormControl, HelpBlock} from "react-bootstrap";
+import {Button, FormGroup, FormControl, HelpBlock} from "react-bootstrap";
 import './navBar.css'
 import LoadingIcon from './loadingIcon'
 
@@ -9,24 +9,24 @@ export default class NavBarLogin extends Component {
         password: '',
         loginLoading: false,
         invalidLogin: false
-    }
+    };
 
     logIn = (event) => {
         //TODO
         event.preventDefault();
         this.setState({loginLoading: true});
         const {email, password} = this.state;
-        if (email == 'disho' && password == 'abc') {
+        if (email === 'disho' && password === 'abc') {
             sessionStorage.setItem("id", "1");
             sessionStorage.setItem("name", "disho");
             sessionStorage.setItem("tip", "0");
             this.props.loginSuccess();
-        } else  if(email == 'admin' && password == '123') {
+        } else  if(email === 'admin' && password === '123') {
             sessionStorage.setItem("id", "1");
             sessionStorage.setItem("name", "admin");
             sessionStorage.setItem("tip", "2");
             this.props.loginSuccess();
-        } else  if(email == 'tvrtka' && password == '123abc') {
+        } else  if(email === 'tvrtka' && password === '123abc') {
             sessionStorage.setItem("id", "11");
             sessionStorage.setItem("name", "tvrtka");
             sessionStorage.setItem("tip", "1");
@@ -52,10 +52,10 @@ export default class NavBarLogin extends Component {
 
             <form onSubmit={this.logIn}>
                     <FormGroup validationState={invalidLogin ? 'error' : null}>
-                        <FormControl name="email" value={email} type="text" placeholder="e-mail"
-                                     onChange={this.updateLogin}/> {' '}
+                        <FormControl name="email" value={email} type="email" placeholder="e-mail"
+                                     onChange={this.updateLogin} autoComplete="email"/> {' '}
                         <FormControl name="password" value={password} type="password" placeholder="lozinka"
-                                     onChange={this.updateLogin}/>
+                                     onChange={this.updateLogin} autoComplete="current-password"/>
                         {' '}
                         <Button bsStyle="success" type="submit" onClick={this.logIn}
                                 disabled={loginLoading}>

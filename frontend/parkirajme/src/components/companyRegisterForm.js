@@ -58,7 +58,7 @@ export default class CompanyRegisterForm extends Component {
 
     oibChange = (e) => {
         const oib = e.target.value;
-        let test = oib.length == 11 && /^\d+$/.test(oib);
+        let test = oib.length === 11 && /^\d+$/.test(oib);
         this.setState({
             oib: oib,
             voib: test,
@@ -88,6 +88,7 @@ export default class CompanyRegisterForm extends Component {
         let alertMsg = test ? null : "Krivi podatci.";
 
         if(test) {
+            //TODO
             //registriraj na backendu
 
             //ako je i dalje ispravno
@@ -112,17 +113,17 @@ export default class CompanyRegisterForm extends Component {
                     <Form>
                         <FormGroup validationState={this.validationState(vemail)}>
                             <h5><b>E-mail</b></h5>
-                            <FormControl name="email" type="text" value={email} onChange={this.emailChange}/>
+                            <FormControl name="email" type="email" value={email} onChange={this.emailChange} autoComplete="email"/>
                             <HelpBlock>{(vemail == null) || (vemail ? '' : 'Krivi format')}</HelpBlock>
                         </FormGroup>
                         <FormGroup validationState={this.validationState(vpassword)}>
                             <h5><b>Lozinka</b></h5>
-                            <FormControl name="password" type="password" value={password} onChange={this.passwordChange}/>
+                            <FormControl name="password" type="password" value={password} onChange={this.passwordChange} autoComplete="new-password"/>
                             <HelpBlock>{(vpassword == null) || (vpassword ? '' : 'Prekratka lozinka')}</HelpBlock>
                         </FormGroup>
                         <FormGroup validationState={this.validationState(vime)}>
                             <h5><b>Ime</b></h5>
-                            <FormControl name="ime" type="text" value={ime} onChange={this.imeChange}/>
+                            <FormControl name="ime" type="text" value={ime} onChange={this.imeChange} autocomplete="organization"/>
                             <HelpBlock>{(vime == null) || (vime ? '' : 'Morate unjeti ime')}</HelpBlock>
                         </FormGroup>
                         <FormGroup validationState={this.validationState(voib)}>
@@ -132,7 +133,7 @@ export default class CompanyRegisterForm extends Component {
                         </FormGroup>
                         <FormGroup validationState={this.validationState(vaddress)}>
                             <h5><b>Adresa sjedišta</b></h5>
-                            <FormControl name="address" type="text" value={address} onChange={this.addressChange}/>
+                            <FormControl name="address" type="address" value={address} onChange={this.addressChange} autoComplete="address-line1"/>
                             <HelpBlock>{(vaddress == null) || (vaddress ? '' : 'Morate unijeti adresu')}</HelpBlock>
                         </FormGroup>
                         {

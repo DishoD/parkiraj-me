@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Button, Modal} from "react-bootstrap";
+import {Modal} from "react-bootstrap";
 import './registrationModal.css'
 import ReservationsList from './reservationsList'
 

@@ -18,10 +18,11 @@ export default class LogoutBtn extends Component{
 
     render() {
         const { isLoggingOut } = this.state;
+        const { isAddingNewParking } = this.props;
 
         return (
             <Navbar.Form pullRight>
-                <Button bsStyle="danger" onClick={this.sendLogoutReq}>Odjavi se</Button>
+                <Button bsStyle="danger" disabled={isAddingNewParking} onClick={this.sendLogoutReq}>Odjavi se</Button>
                 {'   '}
                 <LoadingIcon show={isLoggingOut}/>
             </Navbar.Form>

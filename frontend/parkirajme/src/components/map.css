@@ -6,7 +6,9 @@
 #parkiraj-me-btn {
     position: absolute;
     left: 20px;
-    bottom: 100px;
+    bottom: 175px;
     z-index: 999;
+    border-radius: 12px;
 }
+
 
