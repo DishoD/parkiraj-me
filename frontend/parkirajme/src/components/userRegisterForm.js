@@ -94,12 +94,12 @@ export default class UserRegisterForm extends Component {
     };
 
     register = () => {
-        this.setState({showLoadinIcon: true});
         const {voib, vime, vprezime, vemail, vpassword, vcreditCardNumber } = this.state;
         let test = (voib && vime && vprezime && vemail && vpassword && vcreditCardNumber);
         let alertMsg = test ? null : "Krivi podatci.";
 
         if(test) {
+            //TODO
             //registriraj na backendu
 
             //ako je i dalje ispravno
@@ -124,12 +124,12 @@ export default class UserRegisterForm extends Component {
                     <Form>
                         <FormGroup validationState={this.validationState(vemail)}>
                             <h5><b>E-mail</b></h5>
-                            <FormControl name="email" type="text" value={email} onChange={this.emailChange}/>
+                            <FormControl name="email" type="email" value={email} onChange={this.emailChange} autoComplete="email"/>
                             <HelpBlock>{(vemail == null) || (vemail ? '' : 'Krivi format')}</HelpBlock>
                         </FormGroup>
                         <FormGroup validationState={this.validationState(vpassword)}>
                             <h5><b>Lozinka</b></h5>
-                            <FormControl name="password" type="password" value={password} onChange={this.passwordChange}/>
+                            <FormControl name="password" type="password" value={password} onChange={this.passwordChange} autoComplete="new-password"/>
                             <HelpBlock>{(vpassword == null) || (vpassword ? '' : 'Prekratka lozinka')}</HelpBlock>
                         </FormGroup>
                         <FormGroup validationState={this.validationState(vime)}>
@@ -149,7 +149,7 @@ export default class UserRegisterForm extends Component {
                         </FormGroup>
                         <FormGroup validationState={this.validationState(vcreditCardNumber)}>
                             <h5><b>Broj kreditne kartice</b></h5>
-                            <FormControl name="creditCardNumber" type="text" value={creditCardNumber} onChange={this.creditCardNumberChange}/>
+                            <FormControl name="creditCardNumber" type="text" value={creditCardNumber} onChange={this.creditCardNumberChange} autoComplete="cc-number"/>
                             <HelpBlock>{(vcreditCardNumber == null) || (vcreditCardNumber ? '' : 'Neispravan broj kreditne kartice')}</HelpBlock>
                         </FormGroup>
                         {

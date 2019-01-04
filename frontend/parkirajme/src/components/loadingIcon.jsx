@@ -8,7 +8,7 @@ export default class LoadingIcon extends Component {
 
         return (
             <Fade in={show}>
-                <img src="./icons/loading.gif"/>
+                <img alt='Učitavam...' src="./icons/loading.gif"/>
             </Fade>
         );
     }

@@ -1,4 +1,4 @@
-import { Fade, Image, Button } from 'react-bootstrap'
+import { Fade, Image } from 'react-bootstrap'
 import React, { Component } from 'react'
 import './centerMe.css'
 

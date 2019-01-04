@@ -3,6 +3,7 @@ import './App.css';
 import MapCntroler from './components/mapControler'
 import NavBar from './components/navBar'
 
+
 const position = {
   Zagreb: [45.810875, 15.974711]
 };
@@ -97,7 +98,8 @@ export default class App extends Component {
     myPosition: null,
     parkings: [],
     cars: [],
-    tipKorisnika: 3
+    tipKorisnika: 3,
+    isAddingNewParking: false
   };
 
 
@@ -151,18 +153,32 @@ export default class App extends Component {
     this.setState({parkings: this.getParkings()});
   };
 
+  isAddingNewParkingToggle = () => {
+    this.setState(state => ({isAddingNewParking: !state.isAddingNewParking}));
+  };
+
   componentWillUnmount() {
     //TODO odlogiraj sa servera
   }
 
   render() {
-    const { myPosition, tipKorisnika, cars, parkings } = this.state;
+    const { myPosition, tipKorisnika, cars, parkings, isAddingNewParking } = this.state;
 
+    let navBar = <NavBar id="navbar" loginSuccess={this.loginSuccess} logoutSuccess={this.logoutSuccess} tipKorisnika={tipKorisnika}
+                           cars={cars} carsUpdate={this.carsUpdate} addCar={this.addCar} newParkingToggle={this.isAddingNewParkingToggle}
+                           isAddingNewParking={isAddingNewParking}
+    />;
+
+    navBar = isAddingNewParking ? null : navBar;
 
     return (
       <div>
-        <NavBar id="navbar" loginSuccess={this.loginSuccess} logoutSuccess={this.logoutSuccess} tipKorisnika={tipKorisnika} cars={cars} carsUpdate={this.carsUpdate} addCar={this.addCar}/>
-        <MapCntroler myPosition={myPosition} myPositionUpdate={this.myPositionUpdate} tipKorisnika={tipKorisnika} parkings={parkings} parkingsUpdate={this.parkingsUpdate}/>
+
+        {navBar}
+
+        <MapCntroler myPosition={myPosition} myPositionUpdate={this.myPositionUpdate} tipKorisnika={tipKorisnika} parkings={parkings} parkingsUpdate={this.parkingsUpdate}
+                     isAddingNewParking={isAddingNewParking} newParkingToggle={this.isAddingNewParkingToggle} cars={cars}
+        />
       </div>
     );
   }

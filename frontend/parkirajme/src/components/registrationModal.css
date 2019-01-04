@@ -5,6 +5,20 @@
     margin: 10px;
 }
 
+.center2 {
+    display: flow;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+}
+
+.center1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
 .reg-btn {
     margin: 5px;
     display: compact;
@@ -18,5 +32,6 @@
     display: grid;
     justify-content: center;
     align-items: center;
+    width: 200px;
 }
 

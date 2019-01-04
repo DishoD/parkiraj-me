@@ -6,6 +6,8 @@ import './map.css'
 import L from "leaflet";
 import CenterMeBtn from './centerMeBtn'
 import ParkingMarker from './parkingMarker'
+import ParkingEditor from './parkingEditor'
+import NewParkingMarker from './newParkingMarker'
 
 var myIcon = L.icon({
     iconUrl: 'icons/my_location.png',
@@ -19,7 +21,7 @@ const positions = {
 };
 
 function latLngDistance(lat1, lon1, lat2, lon2, unit) {
-    if ((lat1 == lat2) && (lon1 == lon2)) {
+    if ((lat1 === lat2) && (lon1 === lon2)) {
         return 0;
     }
     else {
@@ -34,8 +36,8 @@ function latLngDistance(lat1, lon1, lat2, lon2, unit) {
         dist = Math.acos(dist);
         dist = dist * 180/Math.PI;
         dist = dist * 60 * 1.1515;
-        if (unit=="K") { dist = dist * 1.609344 }
-        if (unit=="N") { dist = dist * 0.8684 }
+        if (unit==="K") { dist = dist * 1.609344 }
+        if (unit==="N") { dist = dist * 0.8684 }
         return dist;
     }
 }
@@ -53,7 +55,9 @@ export default class MapControler extends Component{
         maxBounds: L.latLngBounds(L.latLng(47.094206, 12.028730), L.latLng(42.128702, 20.731908)),
         watchId: 0,
         selectedParking: null,
-        markerRefs: {}
+        markerRefs: {},
+        isEditingParking: false,
+        newParkingLocation: positions.Zagreb
     };
 
     onViewportChanged = (viewport) => {
@@ -153,6 +157,27 @@ export default class MapControler extends Component{
         this.setState({selectedParking: this.getParkingOfId(id)});
     };
 
+    editParking = () => {
+        this.setState( state => ({
+            isEditingParking: true,
+            newParkingLocation: state.selectedParking.lokacija
+        }));
+        this.props.newParkingToggle();
+        setTimeout(() => this.centerTo(this.state.selectedParking.lokacija), 100);
+    };
+
+    isEditingParkingOff = () => {
+        setTimeout(this.setState(state => ({isEditingParking: false})), 50);
+    };
+
+    isEditingParkingOn = () => {
+        setTimeout(this.setState(state => ({isEditingParking: true})), 50);
+    };
+
+    newParkingLocationUpdate = (pos) => {
+      this.setState({newParkingLocation: pos});
+    };
+
     constructor(props) {
         super(props);
         this.state.watchId = navigator.geolocation.watchPosition(this.geoSucces, this.geoError);
@@ -160,7 +185,7 @@ export default class MapControler extends Component{
 
     geoSucces = (position) => {
         const pos = [position.coords.latitude, position.coords.longitude];
-        if(this.props.myPosition == null && this.props.tipKorisnika != 1) this.centerTo(pos);
+        if(this.props.myPosition == null && this.props.tipKorisnika !== 1) this.centerTo(pos);
         this.props.myPositionUpdate(pos);
     };
 
@@ -168,17 +193,28 @@ export default class MapControler extends Component{
 
     };
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const {isAddingNewParking} = this.props;
+        const {isEditingParking, viewport} = this.state;
+        if(isAddingNewParking && !isEditingParking && !prevProps.isAddingNewParking) {
+            this.setState({
+                newParkingLocation: viewport.center,
+            });
+        }
+    }
 
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.state.watchId)
     }
 
     render() {
-        const { viewport, maxZoom, maxBounds, minZoom, selectedParking } = this.state;
-        const  { myPosition, tipKorisnika, parkings } = this.props;
+        const { viewport, maxZoom, maxBounds, minZoom, isEditingParking, newParkingLocation, selectedParking } = this.state;
+        const  { myPosition, tipKorisnika, parkings, isAddingNewParking, newParkingToggle, parkingsUpdate, cars } = this.props;
+
+
         let myPositionMarker = null;
-        const centerMeBtn = tipKorisnika != 1 ? <CenterMeBtn myPosition={myPosition} position={viewport.center} onClick={this.centerClicked}/> : null;
-        if(myPosition && tipKorisnika != 1) {
+        const centerMeBtn = tipKorisnika !== 1 ? <CenterMeBtn myPosition={myPosition} position={viewport.center} onClick={this.centerClicked}/> : null;
+        if(myPosition && tipKorisnika !== 1) {
             myPositionMarker = (
                 <Marker position={myPosition} icon={myIcon}>
                     <Popup>Ovdje se vi nalazite.</Popup>
@@ -192,10 +228,14 @@ export default class MapControler extends Component{
             parkingsToShow = this.getParkingsOfTvrtkaID(sessionStorage.getItem('id'));
         }
 
-        const parkingMarkers = parkingsToShow.map(parking => <ParkingMarker key={parking.id} parking={parking} tipKorisnika={tipKorisnika} selectedParkingUpdate={this.selectedParkingUpdate}
-                                                                            updateMarkerRef={this.updateMarkerRef}/>)
+        const parkingMarkers = parkingsToShow.map(parking => <ParkingMarker key={parking.id} parking={parking} tipKorisnika={tipKorisnika}
+                                                                            selectedParkingUpdate={this.selectedParkingUpdate}
+                                                                            updateMarkerRef={this.updateMarkerRef} editParking={this.editParking}
+                                                                            cars={cars} parkingUpdate={parkingsUpdate}
+        />);
 
-        const parkirajMeBtn = tipKorisnika != 1 && myPosition != null ? <Button id='parkiraj-me-btn' bsStyle='primary' onClick={this.centerToClosestParking}>Parkiraj<br/>Me</Button> : null;
+        const parkirajMeBtn = tipKorisnika !== 1 && myPosition != null ? <Button id='parkiraj-me-btn' bsStyle='primary' onClick={this.centerToClosestParking}>Parkiraj<br/>Me</Button> : null;
+        const newParkingMarker = <NewParkingMarker newParkingLocation={newParkingLocation} newParkingLocationUpdate={this.newParkingLocationUpdate}/>
 
         return(
           <div>
@@ -209,11 +249,14 @@ export default class MapControler extends Component{
                   />
 
                   {myPositionMarker}
-                  {parkingMarkers}
+                  {isAddingNewParking ? newParkingMarker : parkingMarkers}
                   {parkirajMeBtn}
                   {centerMeBtn}
               </Map>
-
+              <ParkingEditor isAddingNewParking={isAddingNewParking} newParkingToggle={newParkingToggle} parkingsUpdate={parkingsUpdate}
+                isEditingParking={isEditingParking} newParkingLocation={newParkingLocation} selectedParking={selectedParking}
+                             isEditingParkingOff={this.isEditingParkingOff}
+              />
 
           </div>
         );
