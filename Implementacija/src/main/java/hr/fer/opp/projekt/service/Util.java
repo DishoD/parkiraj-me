@@ -20,4 +20,19 @@ public class Util {
     public static void checkField(String parameter, String parameterName) {
         Assert.hasText(parameter, "Polje \"" + parameterName + "\" ne smije biti null i mora sadrzavati text.");
     }
+
+    /**
+     * Provjerava sadrzi li ijedan od servisa dani email.
+     * @param email
+     * @param korisnikService
+     * @param administratorService
+     * @param tvrtkaService
+     * @return
+     */
+    public static boolean checkIfUniqueEmail(String email,
+                                             KorisnikService korisnikService,
+                                             AdministratorService administratorService,
+                                             TvrtkaService tvrtkaService) {
+        return (!korisnikService.containsKorisnik(email) && !administratorService.containsAdministrator(email) && !tvrtkaService.containsTvrtka(email));
+    }
 }

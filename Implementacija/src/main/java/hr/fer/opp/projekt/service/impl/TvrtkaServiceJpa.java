@@ -3,11 +3,9 @@ package hr.fer.opp.projekt.service.impl;
 import hr.fer.opp.projekt.dao.TvrtkaRepository;
 import hr.fer.opp.projekt.domain.Parkiraliste;
 import hr.fer.opp.projekt.domain.Tvrtka;
-import hr.fer.opp.projekt.service.ParkiralisteService;
+import hr.fer.opp.projekt.service.*;
 import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
 import hr.fer.opp.projekt.service.exceptions.RequestDeniedException;
-import hr.fer.opp.projekt.service.TvrtkaService;
-import hr.fer.opp.projekt.service.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +24,12 @@ public class TvrtkaServiceJpa implements TvrtkaService {
     @Autowired
     private ParkiralisteService parkiralisteService;
 
+    @Autowired
+    private KorisnikService korisnikService;
+
+    @Autowired
+    private AdministratorService administratorService;
+
     @Override
     public List<Tvrtka> listAll() {
         return tvrtkaRepository.findAll();
@@ -38,6 +42,8 @@ public class TvrtkaServiceJpa implements TvrtkaService {
 
         Util.checkField(tvrtka.getEmail(), "email");
         Assert.isTrue(tvrtka.getEmail().matches(Util.EMAIL_FORMAT), "Email nije valjan.");
+        Assert.isTrue(Util.checkIfUniqueEmail(tvrtka.getEmail(), korisnikService, administratorService, this),
+                "Email se vec koristi.");
 
         Util.checkField(tvrtka.getIme(), "ime");
         Util.checkField(tvrtka.getAdresaSjedista(), "adresa sjedista");

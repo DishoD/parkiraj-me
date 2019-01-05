@@ -3,11 +3,9 @@ package hr.fer.opp.projekt.service.impl;
 import hr.fer.opp.projekt.dao.KorisnikRepository;
 import hr.fer.opp.projekt.domain.Automobil;
 import hr.fer.opp.projekt.domain.Korisnik;
-import hr.fer.opp.projekt.service.AutomobilService;
+import hr.fer.opp.projekt.service.*;
 import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
-import hr.fer.opp.projekt.service.KorisnikService;
 import hr.fer.opp.projekt.service.exceptions.RequestDeniedException;
-import hr.fer.opp.projekt.service.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +23,12 @@ public class KorisnikServiceJpa implements KorisnikService {
     @Autowired
     private AutomobilService automobilService;
 
+    @Autowired
+    private AdministratorService administratorService;
+
+    @Autowired
+    private TvrtkaService tvrtkaService;
+
     @Override
     public List<Korisnik> listAll() {
         return korisnikRepository.findAll();
@@ -37,6 +41,8 @@ public class KorisnikServiceJpa implements KorisnikService {
 
         Util.checkField(korisnik.getEmail(), "email");
         Assert.isTrue(korisnik.getEmail().matches(Util.EMAIL_FORMAT), "Email nije valjan.");
+        Assert.isTrue(Util.checkIfUniqueEmail(korisnik.getEmail(), this, administratorService, tvrtkaService),
+                "Email se vec koristi.");
 
         Util.checkField(korisnik.getIme(), "ime");
         Util.checkField(korisnik.getPrezime(), "prezime");
