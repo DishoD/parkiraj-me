@@ -93,6 +93,8 @@ public class RezervacijaServiceJpa implements RezervacijaService {
         Long trajanje = dto.getTrajanje();
 
         List<Rezervacija> rezervacije = new ArrayList<>();
+        Korisnik korisnik = korisnikService.fetchKorisnik(korisnikID);
+        Parkiraliste parkiraliste = parkiralisteService.fetchParkiraliste(parkingID);
 
         Date danas = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -128,6 +130,12 @@ public class RezervacijaServiceJpa implements RezervacijaService {
 
                 rezervacije.add(rezervacija);
                 rezervacijaRepository.save(rezervacija);
+
+                korisnik.getRezervacije().add(rezervacija);
+                korisnikRepository.save(korisnik);
+
+                parkiraliste.getRezervacije().add(rezervacija);
+                parkiralisteRepository.save(parkiraliste);
             }
         }
         return rezervacije;
@@ -141,8 +149,17 @@ public class RezervacijaServiceJpa implements RezervacijaService {
         Date vrijemePocetka = new Date();
         Date vrijemeKraja = new Date(vrijemePocetka.getTime() + hoursToMilliseconds((long) 30 * 24));
 
+        Korisnik korisnik = korisnikService.fetchKorisnik(korisnikID);
+        Parkiraliste parkiraliste = parkiralisteService.fetchParkiraliste(parkingID);
+
         Rezervacija rezervacija = new Rezervacija(korisnikID, vrijemePocetka, vrijemeKraja, parkingID, true);
         rezervacijaRepository.save(rezervacija);
+
+        korisnik.getRezervacije().add(rezervacija);
+        korisnikRepository.save(korisnik);
+
+        parkiraliste.getRezervacije().add(rezervacija);
+        parkiralisteRepository.save(parkiraliste);
 
         return rezervacija;
     }
@@ -150,6 +167,14 @@ public class RezervacijaServiceJpa implements RezervacijaService {
     @Override
     public Rezervacija deleteRezervacija(Long id) {
         Rezervacija rezervacija = fetch(id);
+        Korisnik korisnik = korisnikService.fetchKorisnik(rezervacija.getKorisnikID());
+        Parkiraliste parkiraliste = parkiralisteService.fetchParkiraliste(rezervacija.getParkiralisteID());
+
+        korisnik.getRezervacije().remove(rezervacija);
+        parkiraliste.getRezervacije().remove(rezervacija);
+
+        korisnikRepository.save(korisnik);
+        parkiralisteRepository.save(parkiraliste);
         rezervacijaRepository.delete(rezervacija);
         return rezervacija;
     }

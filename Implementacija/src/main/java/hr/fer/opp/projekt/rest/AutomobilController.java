@@ -40,11 +40,8 @@ public class AutomobilController {
 
     @PostMapping("")
     @Secured(Roles.USER)
-    public Automobil createAutomobil(@RequestParam("ime") String ime, @RequestParam("registracija") String registracija,
+    public Automobil createAutomobil(@RequestBody Automobil automobil,
                                      @AuthenticationPrincipal User u)  {
-        Automobil automobil = new Automobil();
-        automobil.setRegistracijskaOznaka(registracija);
-        automobil.setIme(ime);
         automobil.setKorisnikID(korisnikService.fetchKorisnik(u.getUsername()).getId());
         return automobilService.createAutomobil(automobil);
     }
