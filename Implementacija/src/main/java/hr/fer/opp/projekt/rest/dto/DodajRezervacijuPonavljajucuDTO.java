@@ -1,9 +1,10 @@
 package hr.fer.opp.projekt.rest.dto;
 
-public class DodajRezervacijuJednokratnuDTO {
+public class DodajRezervacijuPonavljajucuDTO {
 
     private Long parkingID;
-    private Long vrijemePocetka;
+    private Integer[] dani;
+    private String vrijemePocetka;
     private Long trajanje;
 
     public Long getParkingID() {
@@ -14,11 +15,19 @@ public class DodajRezervacijuJednokratnuDTO {
         this.parkingID = parkingID;
     }
 
-    public Long getVrijemePocetka() {
+    public Integer[] getDani() {
+        return dani;
+    }
+
+    public void setDani(Integer[] dani) {
+        this.dani = dani;
+    }
+
+    public String getVrijemePocetka() {
         return vrijemePocetka;
     }
 
-    public void setVrijemePocetka(Long vrijemePocetka) {
+    public void setVrijemePocetka(String vrijemePocetka) {
         this.vrijemePocetka = vrijemePocetka;
     }
 

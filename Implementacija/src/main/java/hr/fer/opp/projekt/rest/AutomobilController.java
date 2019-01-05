@@ -40,10 +40,16 @@ public class AutomobilController {
 
     @PostMapping("")
     @Secured(Roles.USER)
-    public Automobil createAutomobil(@RequestBody Automobil automobil) {
+    public Automobil createAutomobil(@RequestBody Automobil automobil,
+                                     @AuthenticationPrincipal User u)  {
+        automobil.setKorisnikID(korisnikService.fetchKorisnik(u.getUsername()).getId());
         return automobilService.createAutomobil(automobil);
     }
 
-
-
+    @DeleteMapping("/{registracija}")
+    @Secured(Roles.USER)
+    public Boolean deleteAutomobil(@PathVariable("registracija") String registracija, @AuthenticationPrincipal User u) {
+        Assert.isTrue(u.getUsername().equals(korisnikService.fetchKorisnik(u.getUsername()).getEmail()), "Nemate pravo brisati ovaj automobil");
+        return automobilService.deleteAutomobil(registracija);
+    }
 }

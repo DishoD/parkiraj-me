@@ -20,9 +20,6 @@ public class Automobil {
     @NotNull
     private String ime;
 
-    @OneToMany
-    private Set<Rezervacija> rezervacije;
-
     public Automobil(){
 
     }
@@ -31,7 +28,6 @@ public class Automobil {
         this.registracijskaOznaka = registracijskaOznaka;
         this.ime = ime;
         this.korisnikID = korisnikID;
-        this.rezervacije = new HashSet<>();
     }
 
 
@@ -49,14 +45,6 @@ public class Automobil {
 
     public void setIme(String ime) {
         this.ime = ime;
-    }
-
-    public Set<Rezervacija> getRezervacije() {
-        return rezervacije;
-    }
-
-    public void setRezervacije(Set<Rezervacija> rezervacije) {
-        this.rezervacije = rezervacije;
     }
 
     public Long getKorisnikID() {

@@ -37,4 +37,10 @@ public class KorisnikController {
     public Korisnik createKorisnik(@RequestBody Korisnik korisnik) {
         return korisnikService.createKorisnik(korisnik);
     }
+
+    @DeleteMapping("/{email}")
+    @Secured(Roles.ADMIN)
+    public Boolean deleteKorisnik(@PathVariable String email) {
+        return korisnikService.deleteKorisnik(korisnikService.fetchKorisnik(email));
+    }
 }

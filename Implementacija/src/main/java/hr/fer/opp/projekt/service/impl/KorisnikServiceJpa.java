@@ -1,23 +1,33 @@
 package hr.fer.opp.projekt.service.impl;
 
 import hr.fer.opp.projekt.dao.KorisnikRepository;
+import hr.fer.opp.projekt.domain.Automobil;
 import hr.fer.opp.projekt.domain.Korisnik;
+import hr.fer.opp.projekt.service.*;
 import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
-import hr.fer.opp.projekt.service.KorisnikService;
 import hr.fer.opp.projekt.service.exceptions.RequestDeniedException;
-import hr.fer.opp.projekt.service.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class KorisnikServiceJpa implements KorisnikService {
 
     @Autowired
     private KorisnikRepository korisnikRepository;
+
+    @Autowired
+    private AutomobilService automobilService;
+
+    @Autowired
+    private AdministratorService administratorService;
+
+    @Autowired
+    private TvrtkaService tvrtkaService;
 
     @Override
     public List<Korisnik> listAll() {
@@ -31,6 +41,8 @@ public class KorisnikServiceJpa implements KorisnikService {
 
         Util.checkField(korisnik.getEmail(), "email");
         Assert.isTrue(korisnik.getEmail().matches(Util.EMAIL_FORMAT), "Email nije valjan.");
+        Assert.isTrue(Util.checkIfUniqueEmail(korisnik.getEmail(), this, administratorService, tvrtkaService),
+                "Email se vec koristi.");
 
         Util.checkField(korisnik.getIme(), "ime");
         Util.checkField(korisnik.getPrezime(), "prezime");
@@ -67,7 +79,16 @@ public class KorisnikServiceJpa implements KorisnikService {
         return korisnikRepository.findByEmail(email).isPresent();
     }
 
-    //dummy CC broj koji prolazi provjeru: 54372012565022
+    @Override
+    public boolean deleteKorisnik(Korisnik korisnik) {
+        Set<Automobil> automobili = korisnik.getAutomobili();
+        for (Automobil a : automobili) {
+            automobilService.deleteAutomobil(a.getRegistracijskaOznaka());
+        }
+        korisnikRepository.delete(korisnik);
+        return true;
+    }
+
     private boolean creditCardNumberIsValid(String ccNumber) {
         if (ccNumber.length() < Util.MIN_CC_NUM_LEN || ccNumber.length() > Util.MAX_CC_NUM_LEN) return false;
         for (char c : ccNumber.toCharArray()) {

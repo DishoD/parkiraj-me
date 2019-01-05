@@ -3,6 +3,8 @@ package hr.fer.opp.projekt.service.impl;
 import hr.fer.opp.projekt.dao.AdministratorRepository;
 import hr.fer.opp.projekt.domain.Administrator;
 import hr.fer.opp.projekt.service.AdministratorService;
+import hr.fer.opp.projekt.service.KorisnikService;
+import hr.fer.opp.projekt.service.TvrtkaService;
 import hr.fer.opp.projekt.service.Util;
 import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,12 @@ public class AdministratorServiceJpa implements AdministratorService {
     @Autowired
     private AdministratorRepository administratorRepository;
 
+    @Autowired
+    private KorisnikService korisnikService;
+
+    @Autowired
+    private TvrtkaService tvrtkaService;
+
     @Override
     public List<Administrator> listAll() {
         return administratorRepository.findAll();
@@ -30,6 +38,8 @@ public class AdministratorServiceJpa implements AdministratorService {
 
         Util.checkField(administrator.getEmail(), "email");
         Assert.isTrue(administrator.getEmail().matches(Util.EMAIL_FORMAT), "Email nije valjan.");
+        Assert.isTrue(Util.checkIfUniqueEmail(administrator.getEmail(), korisnikService, this, tvrtkaService),
+                "Email se vec koristi.");
 
         Util.checkField(administrator.getPasswordHash(), "password");
         administrator.setPasswordHash(new BCryptPasswordEncoder().encode(administrator.getPasswordHash()));

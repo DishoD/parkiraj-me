@@ -20,7 +20,7 @@ public class Parkiraliste {
     private String ime;
 
     @NotNull
-    private String lokacija;
+    private Double[] lokacija;
 
     @NotNull
     private Integer kapacitet;
@@ -44,14 +44,6 @@ public class Parkiraliste {
 
     public void setIme(String ime) {
         this.ime = ime;
-    }
-
-    public String getLokacija() {
-        return lokacija;
-    }
-
-    public void setLokacija(String lokacija) {
-        this.lokacija = lokacija;
     }
 
     public Integer getKapacitet() {
@@ -81,4 +73,12 @@ public class Parkiraliste {
     public Long getTvrtkaID() { return tvrtkaID; }
 
     public void setTvrtkaID(Long tvrtkaID) { this.tvrtkaID = tvrtkaID; }
+
+    public Double[] getLokacija() {
+        return lokacija;
+    }
+
+    public void setLokacija(Double[] lokacija) {
+        this.lokacija = lokacija;
+    }
 }

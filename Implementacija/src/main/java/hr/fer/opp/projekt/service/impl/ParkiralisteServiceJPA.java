@@ -1,9 +1,14 @@
 package hr.fer.opp.projekt.service.impl;
 
+import hr.fer.opp.projekt.dao.KorisnikRepository;
 import hr.fer.opp.projekt.dao.ParkiralisteRepository;
+import hr.fer.opp.projekt.dao.RezervacijaRepository;
 import hr.fer.opp.projekt.dao.TvrtkaRepository;
+import hr.fer.opp.projekt.domain.Korisnik;
 import hr.fer.opp.projekt.domain.Parkiraliste;
+import hr.fer.opp.projekt.domain.Rezervacija;
 import hr.fer.opp.projekt.domain.Tvrtka;
+import hr.fer.opp.projekt.service.KorisnikService;
 import hr.fer.opp.projekt.service.ParkiralisteService;
 import hr.fer.opp.projekt.service.TvrtkaService;
 import hr.fer.opp.projekt.service.Util;
@@ -28,6 +33,15 @@ public class ParkiralisteServiceJPA implements ParkiralisteService {
     @Autowired
     private TvrtkaRepository tvrtkaRepository;
 
+    @Autowired
+    private RezervacijaRepository rezervacijaRepository;
+
+    @Autowired
+    private KorisnikService korisnikService;
+
+    @Autowired
+    private KorisnikRepository korisnikRepository;
+
     @Override
     public List<Parkiraliste> listAll() {
         return parkiralisteRepository.findAll();
@@ -46,7 +60,7 @@ public class ParkiralisteServiceJPA implements ParkiralisteService {
         Assert.notNull(parkiraliste.getTvrtkaID(), "TvrtkaID ne smije biti null.");
 
         Util.checkField(parkiraliste.getIme(), "ime");
-        Util.checkField(parkiraliste.getLokacija(), "lokacija");
+//        Util.checkField(parkiraliste.getLokacija(), "lokacija"); //TODO provjera valjanosti lokacije
 
         Assert.notNull(parkiraliste.getKapacitet(), "Kapacitet ne smije biti null.");
         Assert.notNull(parkiraliste.getCijena(), "Cijena ne smije biti null.");
@@ -66,6 +80,14 @@ public class ParkiralisteServiceJPA implements ParkiralisteService {
         }
         Set<Parkiraliste> set = tvrtkaRepository.findById(tvrtkaID).get().getParkiralista();
         set.remove(parkiraliste);
+
+        List<Rezervacija> rezervacije = rezervacijaRepository.findAllByParkiralisteID(parkiralisteID);
+        for (Rezervacija r : rezervacije) {
+            Korisnik k = korisnikService.fetchKorisnik(r.getKorisnikID());
+            k.getRezervacije().remove(r);
+            korisnikRepository.save(k);
+        }
+
         parkiralisteRepository.delete(parkiraliste);
         return true;
     }
