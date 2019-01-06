@@ -18,7 +18,7 @@ public class Util {
      * @param parameterName ime parametra u slucaju greske
      */
     public static void checkField(String parameter, String parameterName) {
-        Assert.hasText(parameter, "Polje \"" + parameterName + "\" ne smije biti null i mora sadrzavati text.");
+        Assert.hasText(parameter, "Polje \"" + parameterName + "\" ne smije biti null i mora sadržavati text.");
     }
 
     /**

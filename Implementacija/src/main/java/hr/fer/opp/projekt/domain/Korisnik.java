@@ -38,7 +38,7 @@ public class Korisnik {
     @OneToMany
     private Set<Automobil> automobili;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Rezervacija> rezervacije;
 
 

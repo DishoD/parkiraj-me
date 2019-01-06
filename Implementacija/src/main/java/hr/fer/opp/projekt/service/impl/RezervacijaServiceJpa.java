@@ -64,7 +64,7 @@ public class RezervacijaServiceJpa implements RezervacijaService {
         Long trajanje = dto.getTrajanje();
 
         Assert.notNull(parkingID, "Potrebno je predati ID parkiralista.");
-        Assert.notNull(vrijemePocetka, "Potrebno je predati vrijeme pocetka.");
+        Assert.notNull(vrijemePocetka, "Potrebno je predati vrijeme početka.");
         Assert.notNull(trajanje, "Potrebno je predati trajanje rezervacije.");
 
         Date vrijemeKraja = new Date(dto.getVrijemePocetka() + hoursToMilliseconds(trajanje));
@@ -144,7 +144,7 @@ public class RezervacijaServiceJpa implements RezervacijaService {
     @Override
     public Rezervacija createRezervacijaTrajna(DodajRezervacijuTrajnuDTO dto, Long korisnikID) {
         Long parkingID = dto.getParkingID();
-        Assert.notNull(parkingID, "Potrebno je predati ID parkiralista.");
+        Assert.notNull(parkingID, "Potrebno je predati ID parkirališta.");
 
         Date vrijemePocetka = new Date();
         Date vrijemeKraja = new Date(vrijemePocetka.getTime() + hoursToMilliseconds((long) 30 * 24));

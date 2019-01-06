@@ -39,7 +39,7 @@ public class AdministratorServiceJpa implements AdministratorService {
         Util.checkField(administrator.getEmail(), "email");
         Assert.isTrue(administrator.getEmail().matches(Util.EMAIL_FORMAT), "Email nije valjan.");
         Assert.isTrue(Util.checkIfUniqueEmail(administrator.getEmail(), korisnikService, this, tvrtkaService),
-                "Email se vec koristi.");
+                "Email se već koristi.");
 
         Util.checkField(administrator.getPasswordHash(), "password");
         administrator.setPasswordHash(new BCryptPasswordEncoder().encode(administrator.getPasswordHash()));

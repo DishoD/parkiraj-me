@@ -31,7 +31,7 @@ public class TvrtkaController {
         if (tvrtka.getEmail().equals(u.getUsername()) || "admin".equals(u.getUsername())) {
             return tvrtka;
         } else {
-            throw new RequestDeniedException("You do not have permission to view this user.");
+            throw new RequestDeniedException("Nemate pravo pristupa ovom korisniku.");
         }
 
     }

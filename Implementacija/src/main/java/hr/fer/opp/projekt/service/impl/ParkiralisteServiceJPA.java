@@ -54,8 +54,8 @@ public class ParkiralisteServiceJPA implements ParkiralisteService {
 
     @Override
     public Parkiraliste createParkiraliste(Parkiraliste parkiraliste) {
-        Assert.notNull(parkiraliste, "Parkiraliste ne smije biti null.");
-        Assert.isNull(parkiraliste.getId(), "Parkiraliste ne smije imati id, on se automatski generira.");
+        Assert.notNull(parkiraliste, "Parkiralište ne smije biti null.");
+        Assert.isNull(parkiraliste.getId(), "Parkiralište ne smije imati id, on se automatski generira.");
 
         Assert.notNull(parkiraliste.getTvrtkaID(), "TvrtkaID ne smije biti null.");
 
@@ -76,7 +76,7 @@ public class ParkiralisteServiceJPA implements ParkiralisteService {
     public Boolean deleteParkiraliste(Long parkiralisteID, Long tvrtkaID) {
         Parkiraliste parkiraliste = fetchParkiraliste(parkiralisteID);
         if(!parkiraliste.getTvrtkaID().equals(tvrtkaID)){
-            throw new RequestDeniedException("To parkiraliste vam ne pripada.");
+            throw new RequestDeniedException("To parkiralište vam ne pripada.");
         }
         Set<Parkiraliste> set = tvrtkaRepository.findById(tvrtkaID).get().getParkiralista();
         set.remove(parkiraliste);

@@ -70,7 +70,7 @@ public class AutomobilServiceJpa implements AutomobilService {
         Assert.hasText(automobil.getRegistracijskaOznaka(), "Potrebno je unijeti registraciju automobila.");
 
         Assert.isTrue(!automobilRepository.findByRegistracijskaOznaka(automobil.getRegistracijskaOznaka()).isPresent(),
-                "Automobil je vec registriran.");
+                "Automobil je već registriran.");
         Assert.isTrue(automobil.getRegistracijskaOznaka().matches(REG_FORMAT), "Registracija nije valjana."); //
 
         Korisnik korisnik = korisnikService.fetchKorisnik(automobil.getKorisnikID());
@@ -85,7 +85,7 @@ public class AutomobilServiceJpa implements AutomobilService {
         Assert.hasText(novaRegistracija, "Potrebno je unijeti registraciju automobila.");
         Assert.isTrue(novaRegistracija.matches(REG_FORMAT), "Registracija nije valjana.");
         if (automobilRepository.findByRegistracijskaOznaka(novaRegistracija).isPresent()) {
-            throw new RequestDeniedException("Automobil je vec registriran.");
+            throw new RequestDeniedException("Automobil je već registriran.");
         }
 
         Automobil auto = fetch(id);

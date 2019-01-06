@@ -1,19 +1,13 @@
 package hr.fer.opp.projekt.rest;
 
-import hr.fer.opp.projekt.dao.AdministratorRepository;
-import hr.fer.opp.projekt.domain.Korisnik;
 import hr.fer.opp.projekt.service.KorisnikService;
 import hr.fer.opp.projekt.service.TvrtkaService;
-import hr.fer.opp.projekt.service.Util;
+import hr.fer.opp.projekt.service.exceptions.RequestDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/")
@@ -37,6 +31,7 @@ public class DefaultController {
     @CrossOrigin(origins = "*")
     public LoginResponseEntity login(@AuthenticationPrincipal User u) {
         LoginResponseEntity entity = new LoginResponseEntity();
+        if (u == null) throw new RequestDeniedException("Krivi username ili password.");
         entity.setUsername(u.getUsername());
         if (u.getAuthorities().containsAll(Roles.userAuthority)) {
             entity.setTip(0);
@@ -52,7 +47,6 @@ public class DefaultController {
     }
 
     private static class LoginResponseEntity {
-//        private Long id;
         private String username;
         private int tip;
         private String ime;

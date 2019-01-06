@@ -42,7 +42,7 @@ public class KorisnikServiceJpa implements KorisnikService {
         Util.checkField(korisnik.getEmail(), "email");
         Assert.isTrue(korisnik.getEmail().matches(Util.EMAIL_FORMAT), "Email nije valjan.");
         Assert.isTrue(Util.checkIfUniqueEmail(korisnik.getEmail(), this, administratorService, tvrtkaService),
-                "Email se vec koristi.");
+                "Email se već koristi.");
 
         Util.checkField(korisnik.getIme(), "ime");
         Util.checkField(korisnik.getPrezime(), "prezime");
@@ -50,7 +50,7 @@ public class KorisnikServiceJpa implements KorisnikService {
         Util.checkField(korisnik.getOib(), "oib");
         Assert.isTrue(korisnik.getOib().matches(Util.OIB_FORMAT), "OIB mora imati 11 znamenaka");
         if (korisnikRepository.countByOib(korisnik.getOib()) > 0) {
-            throw new RequestDeniedException("Korisnik vec postoji");
+            throw new RequestDeniedException("Korisnik već postoji");
         }
 
         Assert.isTrue(creditCardNumberIsValid(korisnik.getBrojKreditneKartice()), "Broj kreditne kartice nije valjan.");

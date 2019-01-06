@@ -28,7 +28,7 @@ public class Parkiraliste {
     @NotNull
     private Integer cijena;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Rezervacija> rezervacije;
 
 

@@ -43,7 +43,7 @@ public class TvrtkaServiceJpa implements TvrtkaService {
         Util.checkField(tvrtka.getEmail(), "email");
         Assert.isTrue(tvrtka.getEmail().matches(Util.EMAIL_FORMAT), "Email nije valjan.");
         Assert.isTrue(Util.checkIfUniqueEmail(tvrtka.getEmail(), korisnikService, administratorService, this),
-                "Email se vec koristi.");
+                "Email se već koristi.");
 
         Util.checkField(tvrtka.getIme(), "ime");
         Util.checkField(tvrtka.getAdresaSjedista(), "adresa sjedista");
@@ -51,7 +51,7 @@ public class TvrtkaServiceJpa implements TvrtkaService {
         Util.checkField(tvrtka.getOib(), "oib");
         Assert.isTrue(tvrtka.getOib().matches(Util.OIB_FORMAT), "OIB mora imati 11 znamenaka");
         if (tvrtkaRepository.countByOib(tvrtka.getOib()) > 0) {
-            throw new RequestDeniedException("Tvrtka vec postoji");
+            throw new RequestDeniedException("Tvrtka već postoji");
         }
 
         Util.checkField(tvrtka.getPasswordHash(), "password");

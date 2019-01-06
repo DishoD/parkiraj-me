@@ -17,7 +17,10 @@ import java.util.Map;
 @ControllerAdvice
 public class RestExceptionHandler {
 
-    @ExceptionHandler({IllegalArgumentException.class, EntityMissingException.class, RequestDeniedException.class})
+    @ExceptionHandler({IllegalArgumentException.class,
+            EntityMissingException.class,
+            RequestDeniedException.class,
+            NullPointerException.class})
     protected ResponseEntity<?> handleIllegalArgument(Exception e, WebRequest req) {
         Map<String, String> props = new HashMap<>();
         props.put("message", e.getMessage());
