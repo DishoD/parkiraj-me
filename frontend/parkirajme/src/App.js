@@ -117,21 +117,12 @@ export default class App extends Component {
     return parkiralista;
   };
 
-  getCars = () => {
-    //TODO
-    return auti.auti;
-  };
-
-  addCar = (ime, reg) => {
-    //TODO
-    addCarStatic(ime, reg);
-  };
 
   myPositionUpdate = (pos) => {this.setState({myPosition: pos})};
 
   loginSuccess = () => {
-    setTimeout(() => this.updateTipKorisnika(), 501);
-    setTimeout(() => this.carsUpdate(), 501);
+    this.updateTipKorisnika();
+    this.carsUpdate();
   };
 
   logoutSuccess = () => {
@@ -146,7 +137,9 @@ export default class App extends Component {
   };
 
   carsUpdate = () => {
-    this.setState({cars: this.getCars()});
+    fetch('/automobili')
+        .then(res => res.json())
+        .then(data => this.setState({cars: data}));
   };
 
   parkingsUpdate = () => {

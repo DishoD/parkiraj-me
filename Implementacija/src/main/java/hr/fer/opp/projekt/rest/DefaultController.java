@@ -34,6 +34,7 @@ public class DefaultController {
     }
 
     @PostMapping("/login")
+    @CrossOrigin(origins = "*")
     public LoginResponseEntity login(@AuthenticationPrincipal User u) {
         LoginResponseEntity entity = new LoginResponseEntity();
         entity.setUsername(u.getUsername());

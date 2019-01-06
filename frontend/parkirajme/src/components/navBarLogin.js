@@ -16,26 +16,28 @@ export default class NavBarLogin extends Component {
         event.preventDefault();
         this.setState({loginLoading: true});
         const {email, password} = this.state;
-        if (email === 'disho' && password === 'abc') {
-            sessionStorage.setItem("id", "1");
-            sessionStorage.setItem("name", "disho");
-            sessionStorage.setItem("tip", "0");
-            this.props.loginSuccess();
-        } else  if(email === 'admin' && password === '123') {
-            sessionStorage.setItem("id", "1");
-            sessionStorage.setItem("name", "admin");
-            sessionStorage.setItem("tip", "2");
-            this.props.loginSuccess();
-        } else  if(email === 'tvrtka' && password === '123abc') {
-            sessionStorage.setItem("id", "11");
-            sessionStorage.setItem("name", "tvrtka");
-            sessionStorage.setItem("tip", "1");
-            this.props.loginSuccess();
-        } else {
-            setTimeout(() => this.setState({invalidLogin: true}), 500);
-        }
-
-        setTimeout(() => this.setState({loginLoading: false}), 500);
+        let body = new FormData();
+        body.append('username', email);
+        body.append('password', password);
+        const options = {
+            method: 'POST',
+            body: body
+        };
+        fetch('/login', options)
+            .then(res => {
+                if(res.status != 200) {
+                    this.setState({loginLoading: false});
+                    setTimeout(() => this.setState({invalidLogin: true}), 10);
+                    return;
+                } else {
+                    res.json().then(data => {
+                        sessionStorage.setItem('tip', data.tip);
+                        sessionStorage.setItem('name', data.ime);
+                        this.setState({loginLoading: false});
+                        setTimeout(this.props.loginSuccess, 10);
+                    });
+                }
+            });
     };
 
     updateLogin = (e) => {

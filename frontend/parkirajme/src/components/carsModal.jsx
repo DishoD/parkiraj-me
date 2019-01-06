@@ -55,7 +55,7 @@ export default class CarsModal extends Component {
                     <Modal.Header closeButton onHide={this.hide}>
                         <Modal.Title>Registracija automobila:</Modal.Title>
                     </Modal.Header>
-                    <CarRegisterForm back={this.downStage} addCar={addCar}/>
+                    <CarRegisterForm back={this.downStage} addCar={addCar} carsUpdate={carsUpdate}/>
                 </div>
             );
         }

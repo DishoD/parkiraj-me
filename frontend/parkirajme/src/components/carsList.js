@@ -8,7 +8,7 @@ class CarsList extends Component {
 
         return (
             <ListGroup componentClass="ul">
-                {cars.map(car => <CarItem key={car.registracija} car={car} carsUpdate={carsUpdate} />)}
+                {cars.map(car => <CarItem key={car.registracijskaOznaka} car={car} carsUpdate={carsUpdate} />)}
             </ListGroup>
         );
     }

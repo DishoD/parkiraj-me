@@ -29,6 +29,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         administratorService.createAdministrator(administrator);
     }
 
+
+
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http
@@ -39,6 +41,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .successForwardUrl("/login?success")
                 .loginPage("/login")
+                .failureForwardUrl("/login?error")
                 .permitAll()
                 .and()
                 .logout()

@@ -9,10 +9,13 @@ class CarItem extends Component {
 
     carRemoved = () => {
         //TODO
-        console.log('izbrisan auto:' + this.props.car.registracija);
-        this.setState({show:false});
 
-        setTimeout(() => this.props.carsUpdate(), 200);
+        fetch('/automobili/' + this.props.car.registracijskaOznaka, {
+           method: 'DELETE'
+        });
+
+        this.setState({show:false});
+        setTimeout(() => this.props.carsUpdate(), 10);
     };
 
     render() {
@@ -22,7 +25,7 @@ class CarItem extends Component {
         return (
             <Fade in={show}>
                 <li className="list-group-item">
-                    <h5><b>{car.ime}</b></h5>  <small>registracija:</small> {car.registracija}
+                    <h5><b>{car.ime}</b></h5>  <small>registracija:</small> {car.registracijskaOznaka}
                     <Button className="right" bsStyle="danger" bsSize="xsmall" onClick={this.carRemoved}>Ukloni</Button>
                 </li>
             </Fade>

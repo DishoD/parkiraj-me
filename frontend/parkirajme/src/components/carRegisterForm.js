@@ -49,21 +49,42 @@ export default class CarRegisterForm extends Component {
     register = () => {
         const {vime, vregistracija, ime, registracija} = this.state;
         let test = (vime && vregistracija);
-        let alertMsg = test ? null : "Krivi podatci.";
 
         if(test) {
             //registriraj na backendu
 
-            //ako je i dalje ispravno
-            alertMsg = test ? "Uspješna registracija automobila!" : "Krivi podatci."; //ovisno o erroru treba postavit grešku
-            this.props.addCar(ime, registracija);
-            setTimeout(() => this.props.back(), 2500);
-        }
+            const data = {
+                ime: ime,
+                registracijskaOznaka: registracija.toUpperCase()
+            };
 
-        this.setState({
-            registrationValid: test,
-            alertMsg: alertMsg
-        });
+            fetch('/automobili', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                if(response.status != 200) {
+                    this.setState({
+                        registrationValid: false,
+                        alertMsg: 'Automobil s danom registracijom već postoji.'
+                    });
+                } else {
+                    this.setState({
+                        registrationValid: true,
+                        alertMsg: 'Uspješna registracija automobila!'
+                    });
+                    this.props.carsUpdate();
+                    setTimeout(() => this.props.back(), 2500);
+                }
+            });
+        } else {
+            this.setState({
+                registrationValid: false,
+                alertMsg: 'Neispravni podatci!'
+            });
+        }
     };
 
     render() {

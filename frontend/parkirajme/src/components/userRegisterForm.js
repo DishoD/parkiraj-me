@@ -80,7 +80,7 @@ export default class UserRegisterForm extends Component {
 
     creditCardNumberChange = (e) => {
         const ccn = e.target.value;
-        let test = ccn.length >= 14 && ccn.length <= 19 && /^\d+$/.test(ccn);
+        let test = ccn.length >= 13 && ccn.length <= 16 && /^\d+$/.test(ccn);
         this.setState({
             creditCardNumber: ccn,
             vcreditCardNumber: test,
@@ -95,16 +95,46 @@ export default class UserRegisterForm extends Component {
 
     register = () => {
         const {voib, vime, vprezime, vemail, vpassword, vcreditCardNumber } = this.state;
+        const {oib, ime, prezime, creditCardNumber, email, password} = this.state;
         let test = (voib && vime && vprezime && vemail && vpassword && vcreditCardNumber);
         let alertMsg = test ? null : "Krivi podatci.";
 
         if(test) {
             //TODO
             //registriraj na backendu
+            const data = {
+                oib: oib,
+                ime: ime,
+                prezime: prezime,
+                email: email,
+                passwordHash: password,
+                brojKreditneKartice: creditCardNumber
+            };
 
-            //ako je i dalje ispravno
-            alertMsg = test ? "Uspješna registracija! Sada se možete prijaviti." : "Krivi podatci."; //ovisno o erroru treba postavit grešku
-            setTimeout(() => this.props.onHide(), 5000);
+            fetch('/korisnici', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if(response.status != 200) {
+                        response.json().then(data => {
+                            this.setState({
+                                registrationValid: false,
+                                alertMsg: data.message
+                            });
+                        })
+                    } else {
+                        this.setState({
+                            registrationValid: true,
+                            alertMsg: "Uspješna registracija! Sada se možete prijaviti."
+                        });
+                        setTimeout(() => this.props.onHide(), 3500);
+                    }
+                });
+            return;
         }
 
         this.setState({
