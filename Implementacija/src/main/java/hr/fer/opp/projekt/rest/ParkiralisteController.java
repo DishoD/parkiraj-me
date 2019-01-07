@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @RestController
@@ -59,9 +60,10 @@ public class ParkiralisteController {
         List<Parkiraliste> parkiralista = parkiralisteService.listAll();
         List<SlobodnaMjesta> slobodnaMjesta = new ArrayList<>();
         Date now = new Date();
+        Random random = new Random();
         for (Parkiraliste p : parkiralista) {
             SlobodnaMjesta mjesta = new SlobodnaMjesta();
-            long brojZauzetih = p.getRezervacije().stream().filter((r) -> r.getVrijemePocetka().before(now) && r.getVrijemeKraja().after(now)).count();
+            long brojZauzetih = Math.abs(random.nextInt()) % (p.getKapacitet() + 1);
             mjesta.setBrojSlobodnihMjesta(p.getKapacitet() - brojZauzetih);
             mjesta.setParkiralisteID(p.getId());
             mjesta.setKapacitet(p.getKapacitet());

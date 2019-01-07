@@ -15,6 +15,7 @@ import hr.fer.opp.projekt.service.ParkiralisteService;
 import hr.fer.opp.projekt.service.RezervacijaService;
 import hr.fer.opp.projekt.service.AutomobilService;
 import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
+import hr.fer.opp.projekt.service.exceptions.RequestDeniedException;
 import net.bytebuddy.description.field.FieldDescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RezervacijaServiceJpa implements RezervacijaService {
@@ -145,6 +147,15 @@ public class RezervacijaServiceJpa implements RezervacijaService {
     public Rezervacija createRezervacijaTrajna(DodajRezervacijuTrajnuDTO dto, Long korisnikID) {
         Long parkingID = dto.getParkingID();
         Assert.notNull(parkingID, "Potrebno je predati ID parkirališta.");
+
+        List<Rezervacija> trajne = korisnikService.fetchKorisnik(korisnikID).getRezervacije()
+                .stream()
+                .filter((r) -> r.getTrajna())
+                .filter((r) -> r.getParkiralisteID().equals(parkingID))
+                .collect(Collectors.toList());
+
+        if (trajne != null && trajne.size() != 0)
+            throw new RequestDeniedException("Već imate trajnu rezervaciju na ovom parkiralištu.");
 
         Date vrijemePocetka = new Date();
         Date vrijemeKraja = new Date(vrijemePocetka.getTime() + hoursToMilliseconds((long) 30 * 24));
