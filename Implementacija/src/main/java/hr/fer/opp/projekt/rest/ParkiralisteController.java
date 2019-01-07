@@ -39,6 +39,15 @@ public class ParkiralisteController {
         return parkiralisteService.createParkiraliste(parkiraliste);
     }
 
+    @PostMapping("/uredi/{parkiralisteID}")
+    @Secured(Roles.COMPANY)
+    public Parkiraliste updateParkiraliste(@RequestBody Parkiraliste parkiraliste,
+                                           @AuthenticationPrincipal User u,
+                                           @PathVariable("parkiralisteID") Long parkiralisteID) {
+        parkiraliste.setTvrtkaID(tvrtkaService.fetchTvrtka(u.getUsername()).getId());
+        return parkiralisteService.updateParkiraliste(parkiraliste, parkiralisteID);
+    }
+
     @DeleteMapping("/{parkiralisteID}")
     @Secured(Roles.COMPANY)
     public Boolean deleteParkiraliste(@PathVariable("parkiralisteID") Long parkiralisteID, @AuthenticationPrincipal User u){

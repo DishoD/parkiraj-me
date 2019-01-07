@@ -11,6 +11,8 @@ public interface ParkiralisteService {
 
     Parkiraliste createParkiraliste(Parkiraliste parkiraliste);
 
+    Parkiraliste updateParkiraliste(Parkiraliste parkiraliste, Long parkiralisteID);
+
     Boolean deleteParkiraliste(Long parkiralisteID, Long tvrtkaID);
 
     Parkiraliste fetchParkiraliste(Long parkiralisteID);

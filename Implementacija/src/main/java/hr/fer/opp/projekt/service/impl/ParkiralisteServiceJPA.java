@@ -54,22 +54,24 @@ public class ParkiralisteServiceJPA implements ParkiralisteService {
 
     @Override
     public Parkiraliste createParkiraliste(Parkiraliste parkiraliste) {
-        Assert.notNull(parkiraliste, "Parkiralište ne smije biti null.");
-        Assert.isNull(parkiraliste.getId(), "Parkiralište ne smije imati id, on se automatski generira.");
-
-        Assert.notNull(parkiraliste.getTvrtkaID(), "TvrtkaID ne smije biti null.");
-
-        Util.checkField(parkiraliste.getIme(), "ime");
-//        Util.checkField(parkiraliste.getLokacija(), "lokacija"); //TODO provjera valjanosti lokacije
-
-        Assert.notNull(parkiraliste.getKapacitet(), "Kapacitet ne smije biti null.");
-        Assert.notNull(parkiraliste.getCijena(), "Cijena ne smije biti null.");
+        validate(parkiraliste);
 
         Tvrtka tvrtka = tvrtkaService.fetchTvrtka(parkiraliste.getTvrtkaID());
         tvrtka.getParkiralista().add(parkiraliste);
         parkiralisteRepository.save(parkiraliste);
         tvrtkaRepository.save(tvrtka);
         return parkiraliste;
+    }
+
+    @Override
+    public Parkiraliste updateParkiraliste(Parkiraliste parkiraliste, Long parkiralisteID) {
+        validate(parkiraliste);
+        Parkiraliste staro = fetchParkiraliste(parkiralisteID);
+        staro.setLokacija(parkiraliste.getLokacija());
+        staro.setKapacitet(parkiraliste.getKapacitet());
+        staro.setIme(parkiraliste.getIme());
+        staro.setCijena(parkiraliste.getCijena());
+        return parkiralisteRepository.save(staro);
     }
 
     @Override
@@ -96,5 +98,18 @@ public class ParkiralisteServiceJPA implements ParkiralisteService {
     @Override
     public Parkiraliste fetchParkiraliste(Long parkiralisteID) {
         return parkiralisteRepository.findById(parkiralisteID).orElseThrow(()->new EntityMissingException(Parkiraliste.class, parkiralisteID));
+    }
+
+    private void validate(Parkiraliste parkiraliste) {
+        Assert.notNull(parkiraliste, "Parkiralište ne smije biti null.");
+        Assert.isNull(parkiraliste.getId(), "Parkiralište ne smije imati id, on se automatski generira.");
+
+        Assert.notNull(parkiraliste.getTvrtkaID(), "TvrtkaID ne smije biti null.");
+
+        Util.checkField(parkiraliste.getIme(), "ime");
+//        Util.checkField(parkiraliste.getLokacija(), "lokacija"); //TODO provjera valjanosti lokacije
+
+        Assert.notNull(parkiraliste.getKapacitet(), "Kapacitet ne smije biti null.");
+        Assert.notNull(parkiraliste.getCijena(), "Cijena ne smije biti null.");
     }
 }
