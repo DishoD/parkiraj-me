@@ -5,7 +5,7 @@ import ReservationsList from './reservationsList'
 
 export default class ReservationsModal extends Component {
     render() {
-        const { show, onHide } = this.props;
+        const { show, onHide, parkingName } = this.props;
 
 
         return (
@@ -15,7 +15,7 @@ export default class ReservationsModal extends Component {
                         <Modal.Title>Vaše trajne rezervacije</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <ReservationsList/>
+                        <ReservationsList parkingName={parkingName}/>
                     </Modal.Body>
                     <Modal.Footer>
                         <small>Napravite novu rezervaciju tako da kliknete na željeno parkiralište na karti te potom gumb 'rezerviraj'.</small>

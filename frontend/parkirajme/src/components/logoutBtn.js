@@ -5,16 +5,14 @@ import LoadingIcon from './loadingIcon'
 export default class LogoutBtn extends Component{
     state = {
         isLoggingOut: false
-    }
+    };
 
     sendLogoutReq = () => {
         this.setState({isLoggingOut: true});
         //posalji zahtjev na server za logout
 
-        setTimeout(() => {this.setState({isLoggingOut: false})}, 500);
-
-        this.props.logoutSuccess();
-    }
+        setTimeout(() => {this.setState({isLoggingOut: false}); this.props.logoutSuccess()}, 500);
+    };
 
     render() {
         const { isLoggingOut } = this.state;

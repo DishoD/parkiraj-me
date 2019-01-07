@@ -54,18 +54,64 @@ export default class ParkingEditor extends Component {
 
     register = () => {
         const {vime, vkapacitet, vcijena } = this.state;
+        const {ime, kapacitet, cijena } = this.state;
         let test = (vime && vkapacitet && vcijena);
         let alertMsg = test ? null : "Krivi podatci.";
 
         if(test) {
-            //TODO
             //registriraj na backendu
+            const data = {
+                ime: ime,
+                lokacija: this.props.newParkingLocation,
+                kapacitet: kapacitet,
+                cijena: cijena
+            };
 
-            //ako je i dalje ispravno
-            alertMsg = test ? "Podaci uspješno spremljeni!" : "Krivi podatci."; //ovisno o erroru treba postavit grešku
+            if(this.props.isEditingParking) {
+                fetch('/parkiralista/uredi/'+this.props.selectedParking.id, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data)
+                }).then(res => {
+                    this.setState({
+                        registrationValid: true,
+                        alertMsg: "Podaci uspješno uređeni!"
+                    });
+                    this.props.isEditingParkingOff();
+                    this.props.parkingsUpdate();
+                    setTimeout(() => this.props.newParkingToggle(), 2500);
+                });
+                return;
+            }
 
-            this.props.parkingsUpdate();
-            setTimeout(() => this.props.newParkingToggle(), 2500);
+            fetch('/parkiralista', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if(response.status != 200) {
+                        response.json().then(data => {
+                            this.setState({
+                                registrationValid: false,
+                                alertMsg: data.message
+                            });
+                        })
+                    } else {
+                        this.setState({
+                            registrationValid: true,
+                            alertMsg: "Podaci uspješno spremljeni!"
+                        });
+                        this.props.parkingsUpdate();
+                        setTimeout(() => this.props.newParkingToggle(), 2500);
+                    }
+                });
+
+            return;
         }
 
         this.setState({

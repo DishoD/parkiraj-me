@@ -24,7 +24,7 @@ export default class ReserveModal extends Component {
     };
 
     render() {
-        const { show, onHide, parking, cars } = this.props;
+        const { show, onHide, parking, cars, parkingsUpdate } = this.props;
         const { stage } = this.state;
 
         let body = null;
@@ -78,7 +78,7 @@ export default class ReserveModal extends Component {
                     <Modal.Header closeButton onHide={onHide}>
                         <Modal.Title>Trajna rezervacija</Modal.Title>
                     </Modal.Header>
-                    <TrajnaRezervacijaForm back={this.resetStage} onHide={this.hide} parking={parking}/>
+                    <TrajnaRezervacijaForm back={this.resetStage} onHide={this.hide} parking={parking} parkingsUpdate={parkingsUpdate}/>
                 </div>
             );
         }

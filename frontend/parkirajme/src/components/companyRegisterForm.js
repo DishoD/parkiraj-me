@@ -84,16 +84,44 @@ export default class CompanyRegisterForm extends Component {
     register = () => {
         this.setState({showLoadinIcon: true});
         const {voib, vime, vemail, vpassword, vaddress } = this.state;
+        const {oib, ime, email, password, address } = this.state;
         let test = (voib && vime && vemail && vpassword && vaddress);
         let alertMsg = test ? null : "Krivi podatci.";
 
         if(test) {
-            //TODO
-            //registriraj na backendu
+            const data = {
+                oib: oib,
+                ime: ime,
+                email: email,
+                passwordHash: password,
+                adresaSjedista: address
+            };
 
-            //ako je i dalje ispravno
-            alertMsg = test ? "Uspješna registracija! Sada se možete prijaviti." : "Krivi podatci."; //ovisno o erroru treba postavit grešku
-            setTimeout(() => this.props.onHide(), 5000);
+            fetch('/tvrtke', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if(response.status != 200) {
+                        response.json().then(data => {
+                            this.setState({
+                                registrationValid: false,
+                                alertMsg: data.message
+                            });
+                        })
+                    } else {
+                        this.setState({
+                            registrationValid: true,
+                            alertMsg: "Uspješna registracija! Sada se možete prijaviti."
+                        });
+                        setTimeout(() => this.props.onHide(), 3500);
+                    }
+                });
+
+            return;
         }
 
         this.setState({
@@ -123,7 +151,7 @@ export default class CompanyRegisterForm extends Component {
                         </FormGroup>
                         <FormGroup validationState={this.validationState(vime)}>
                             <h5><b>Ime</b></h5>
-                            <FormControl name="ime" type="text" value={ime} onChange={this.imeChange} autocomplete="organization"/>
+                            <FormControl name="ime" type="text" value={ime} onChange={this.imeChange} autoComplete="organization"/>
                             <HelpBlock>{(vime == null) || (vime ? '' : 'Morate unjeti ime')}</HelpBlock>
                         </FormGroup>
                         <FormGroup validationState={this.validationState(voib)}>

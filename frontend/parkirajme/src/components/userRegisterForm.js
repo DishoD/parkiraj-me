@@ -100,7 +100,6 @@ export default class UserRegisterForm extends Component {
         let alertMsg = test ? null : "Krivi podatci.";
 
         if(test) {
-            //TODO
             //registriraj na backendu
             const data = {
                 oib: oib,

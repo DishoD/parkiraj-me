@@ -3,33 +3,6 @@ import { Button, Modal} from "react-bootstrap";
 import './registrationModal.css'
 import UsersList from './usersList'
 
-var korisnici = [
-    {
-        oib: '11111111111',
-        ime: 'Marko',
-        prezime: 'Markić',
-        email: 'marko.markic@gmail.com',
-    },
-    {
-        oib: '22222222222',
-        ime: 'Pero',
-        prezime: 'Perić',
-        email: 'pp@fer.hr',
-    },
-    {
-        oib: '12121516154',
-        ime: 'Tamara',
-        prezime: 'Tam',
-        email: 'tam.tam@yahoo.hr',
-    },
-    {
-        oib: '98745632159',
-        ime: 'Barbara',
-        prezime: 'Bić',
-        email: 'barbie.bic@gmail.com',
-    }
-];
-
 var tvrtke = [
     {
         oib: '12312312312',
@@ -55,8 +28,14 @@ var tvrtke = [
 export default class UsersModal extends Component {
     state = {
         stage: null,
-        users: null
+        users: [],
+        companies: []
     };
+
+    componentDidMount() {
+        this.updateTvrtke();
+        this.updateKorisnici();
+    }
 
     hide = () => {
         this.props.onHide();
@@ -65,38 +44,32 @@ export default class UsersModal extends Component {
 
     onChoose = (e) => {
         this.setState({stage: e.target.name});
-        if(e.target.name === 'korisnici') {
-            this.updateKorisnici();
-        } else {
-            this.updateTvrtke();
-        }
     };
 
     resetStage = () => {
         this.setState({stage: null});
     };
 
-    getKorisnici = () => {
-        //TODO
-        return korisnici;
-    };
-
-    getTvrtke = () => {
-        //TODO
-        return tvrtke;
-    };
 
     updateTvrtke = () => {
-        this.setState({users: this.getTvrtke()});
+        fetch('/tvrtke')
+            .then(res => res.json())
+            .then(data => {
+                this.setState({companies: data});
+            });
     };
 
     updateKorisnici = () => {
-        this.setState({users: this.getKorisnici()});
+        fetch('/korisnici')
+            .then(res => res.json())
+            .then(data => {
+                this.setState({users: data});
+            });
     };
 
     render() {
         const { show, onHide } = this.props;
-        const { stage, users } = this.state;
+        const { stage, users, companies } = this.state;
 
         let body = null;
         if(stage == null) {
@@ -124,7 +97,7 @@ export default class UsersModal extends Component {
                         <Modal.Title>Tvrtke</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <UsersList type={stage} users={users} updateUsers={this.updateTvrtke}/>
+                        <UsersList type={stage} companies={companies} updateUsers={this.updateTvrtke}/>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button bsStyle="primary" onClick={this.resetStage}>Natrag</Button>

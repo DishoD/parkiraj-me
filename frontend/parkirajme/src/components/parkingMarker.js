@@ -27,7 +27,7 @@ export default class ParkingMarker extends Component {
     };
 
     spu = () => {
-        setTimeout(() => this.props.selectedParkingUpdate(this.props.parking.id), 50);
+        this.props.selectedParkingUpdate(this.props.parking.id);
     };
 
     ref = React.createRef();
@@ -37,9 +37,10 @@ export default class ParkingMarker extends Component {
     }
 
     deleteParking = () => {
-        //TODO
+        fetch('/parkiralista/'+this.props.parking.id, {
+            method: 'DELETE'
+        }).then(this.props.parkingUpdate());
 
-        setTimeout(() => this.props.parkingUpdate(), 200);
     };
 
 
@@ -67,7 +68,7 @@ export default class ParkingMarker extends Component {
                     <p><small>cijena: </small> {parking.cijena} kn/h</p>
                     {btn}
                 </Popup>
-                <ReserveModal show={reserveShow} onHide={this.reserveShowOff} parking={parking} cars={cars}/>
+                <ReserveModal show={reserveShow} onHide={this.reserveShowOff} parking={parking} cars={cars} parkingsUpdate={this.props.parkingUpdate}/>
             </Marker>
         );
     }

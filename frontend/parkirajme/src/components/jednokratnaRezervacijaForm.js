@@ -99,13 +99,39 @@ export default class JednokratnaRezervacijaForm extends Component {
         let alertMsg = test ? null : 'Morate odabrati vrijeme rezervacije!';
 
         if(test) {
-            //TODO
             //registriraj na backendu
 
+            const data = {
+              parkingID: this.props.parking.id,
+              vrijemePocetka: datetime.getTime(),
+              trajanje: lenght
+            };
 
-            //ako je i dalje ispravno
-            alertMsg = test ? "Uspješna rezervacija!" : "Parkiralište je popunjeno u odabranom periodu! Odaberite drugo vrijeme."; //ovisno o erroru treba postavit grešku
-            if (test) setTimeout(() => this.props.onHide(), 5000);
+            fetch('/rezervacije/jednokratne', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if(response.status != 200) {
+                        response.json().then(data => {
+                            this.setState({
+                                registrationValid: false,
+                                alertMsg: "Parkiralište je popunjeno u odabranom periodu! Odaberite drugo vrijeme."
+                            });
+                        })
+                    } else {
+                        this.setState({
+                            registrationValid: true,
+                            alertMsg: "Uspješna rezervacija!"
+                        });
+                        setTimeout(() => this.props.onHide(), 2500)
+                    }
+                });
+
+            return;
         }
 
 

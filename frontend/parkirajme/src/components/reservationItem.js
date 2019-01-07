@@ -9,10 +9,14 @@ class ReservationItem extends Component {
     };
 
     reservationRemoved = () => {
-        //TODO
         this.setState({show:false});
 
-        setTimeout(() => this.props.reservationsUpdate(), 200);
+        fetch('/rezervacije/trajna/'+this.props.reservation.id, {
+            method: 'DELETE'
+        }).then( res => {
+            setTimeout(() => this.props.reservationsUpdate(), 200);
+        });
+
     };
 
     render() {

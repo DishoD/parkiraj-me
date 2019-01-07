@@ -62,6 +62,7 @@ export default class MapControler extends Component{
 
     onViewportChanged = (viewport) => {
         setTimeout(() => this.setState({viewport: viewport}), 10);
+        if(!this.props.isAddingNewParking) setTimeout(() => this.setState({newParkingLocation: viewport.center}), 10);
     };
 
     centerClicked = () => {
@@ -89,7 +90,7 @@ export default class MapControler extends Component{
     getParkingsOfTvrtkaID = (id) => {
         let ret = [];
         this.props.parkings.forEach(p => {
-            if(p.tvrtkaID === id) ret.push(p);
+            if(p.tvrtkaID == id) ret.push(p);
         });
         return ret;
     };
@@ -97,7 +98,7 @@ export default class MapControler extends Component{
     getParkingOfId = (id) => {
         let ret = null;
         this.props.parkings.forEach(p => {
-            if(p.id === id) ret = p;
+            if(p.id == id) ret = p;
         });
 
         return ret;
@@ -193,15 +194,6 @@ export default class MapControler extends Component{
 
     };
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        const {isAddingNewParking} = this.props;
-        const {isEditingParking, viewport} = this.state;
-        if(isAddingNewParking && !isEditingParking && !prevProps.isAddingNewParking) {
-            this.setState({
-                newParkingLocation: viewport.center,
-            });
-        }
-    }
 
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.state.watchId)

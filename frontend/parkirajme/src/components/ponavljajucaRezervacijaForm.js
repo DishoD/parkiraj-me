@@ -37,22 +37,54 @@ export default class PonavljajucaRezervacijaForm extends Component {
         let test = startTime != null;
         let alertMsg = test ? null : 'Morate odabrati vrijeme rezervacije!';
 
-        if(test) {
-            //TODO
-            const st = String(startTime.getHours()) + ':' + startTime.getMinutes();
-            //registriraj na backendu
-
-
-            //ako je i dalje ispravno
-            alertMsg = test ? "Uspješna rezervacija!" : "Parkiralište je popunjeno u odabranom periodu! Odaberite drugo vrijeme."; //ovisno o erroru treba postavit grešku
-            if (test) setTimeout(() => this.props.onHide(), 5000);
+        if(startTime == null) {
+            this.setState({
+                registrationValid: false,
+                alertMsg: 'Morate odabrati vrijeme rezervacije!'
+            });
+            return;
+        } else if(days.length === 0) {
+            this.setState({
+                registrationValid: false,
+                alertMsg: 'Morate odabrati barem jedan dan u tjednu'
+            });
+            return;
         }
 
+        if(test) {
+            const st = String(startTime.getHours()) + ':' + startTime.getMinutes();
 
-        this.setState({
-            registrationValid: test,
-            alertMsg: alertMsg
-        });
+            const data = {
+                parkingID: this.props.parking.id,
+                dani: days,
+                vrijemePocetka: st,
+                trajanje: lenght
+            };
+
+            fetch('/rezervacije/ponavljajuce', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if(response.status != 200) {
+                        response.json().then(data => {
+                            this.setState({
+                                registrationValid: false,
+                                alertMsg: "Parkiralište je popunjeno u odabranom periodu! Odaberite drugo vrijeme."
+                            });
+                        })
+                    } else {
+                        this.setState({
+                            registrationValid: true,
+                            alertMsg: "Uspješna rezervacija!"
+                        });
+                        setTimeout(() => this.props.onHide(), 2500)
+                    }
+                });
+        }
     };
 
 

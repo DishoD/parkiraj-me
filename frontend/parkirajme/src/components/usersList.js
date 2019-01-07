@@ -4,16 +4,17 @@ import {Table, Button} from "react-bootstrap";
 function TvrtkaRow(props) {
 
     function removeTvrtka() {
-        //TODO izbrisi na backendu
-        setTimeout(() => props.update(), 100);
+        fetch('/tvrtke/'+props.company.email, {
+            method: 'DELETE'
+        }).then(() => props.update());
     }
 
     return (
         <tr>
-            <td>{props.user.oib}</td>
-            <td>{props.user.ime}</td>
-            <td>{props.user.email}</td>
-            <td>{props.user.adresa}</td>
+            <td>{props.company.oib}</td>
+            <td>{props.company.ime}</td>
+            <td>{props.company.email}</td>
+            <td>{props.company.adresaSjedista}</td>
             <td><Button bsStyle='danger' bsSize='xsmall' onClick={removeTvrtka}>Izbriši</Button></td>
         </tr>
     );
@@ -22,8 +23,9 @@ function TvrtkaRow(props) {
 function KorisnikRow(props) {
 
     function removeKorisnik() {
-        //TODO izbrisi na backendu
-        setTimeout(() => props.update(), 100);
+        fetch('/korisnici/'+props.user.email, {
+            method: 'DELETE'
+        }).then(() => props.update());
     }
 
     return (
@@ -38,11 +40,12 @@ function KorisnikRow(props) {
 
 export default class UsersList extends Component {
     render() {
-        const {type, users, updateUsers} = this.props;
+        const {type, users, companies, updateUsers} = this.props;
 
         let head = null, body = null;
 
         if(type === 'tvrtke') {
+
             head = (
                 <thead>
                     <tr>
@@ -57,13 +60,14 @@ export default class UsersList extends Component {
             body = (
                 <tbody>
                 {
-                    users.map(user =>
-                       <TvrtkaRow  key={user.oib} user={user} update={updateUsers} />
+                    companies.map(company =>
+                       <TvrtkaRow  key={company.id} company={company} update={updateUsers} />
                     )
                 }
                 </tbody>
             );
         } else {
+
             head = (
                 <thead>
                 <tr>
@@ -78,7 +82,7 @@ export default class UsersList extends Component {
                 <tbody>
                 {
                     users.map(user =>
-                        <KorisnikRow  key={user.oib} user={user} update={updateUsers}/>
+                        <KorisnikRow  key={user.id} user={user} update={updateUsers}/>
                     )
                 }
                 </tbody>

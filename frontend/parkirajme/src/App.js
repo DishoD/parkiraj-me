@@ -65,33 +65,6 @@ var parkiralista = [
   },
 ];
 
-var auti = {
-  auti: [
-    {
-      ime: "audi",
-      registracija: "12-asbs-56"
-    },
-    {
-      ime: "mercedes",
-      registracija: "56-ccds-78"
-    },
-    {
-      ime: "golf",
-      registracija: "25-lom-36"
-    },
-    {
-      ime: "lamburghini",
-      registracija: "11-xxx-11"
-    }
-  ]
-};
-
-function addCarStatic(ime, reg) {
-  auti.auti.push({
-    ime: ime,
-    registracija: reg
-  });
-}
 
 export default class App extends Component {
   state = {
@@ -102,19 +75,39 @@ export default class App extends Component {
     isAddingNewParking: false
   };
 
+  puID = 0;
 
   componentWillMount() {
     const tip = sessionStorage.getItem('tip');
     if(tip != null) {
       this.updateTipKorisnika();
-      this.carsUpdate();
+      if(tip === '0') this.carsUpdate();
     }
-    this.parkingsUpdate();
+    this.puID = setInterval(this.parkingsUpdate(), 60000);
   }
 
-  getParkings = () => {
-    //TODO
-    return parkiralista;
+  getParkingOfId = (id, parkings) => {
+    let ret = null;
+    parkings.forEach(p => {
+      if(p.id === id) {
+        ret = p;
+        return;
+      }
+    });
+
+    return ret;
+  };
+
+  getParkingNameOfId = (id) => {
+    let ret = null;
+    this.state.parkings.forEach(p => {
+      if(p.id == id) {
+        ret = p.ime;
+        return;
+      }
+    });
+
+    return ret;
   };
 
 
@@ -122,12 +115,14 @@ export default class App extends Component {
 
   loginSuccess = () => {
     this.updateTipKorisnika();
-    this.carsUpdate();
+
+    if(sessionStorage.getItem('tip') === '0') this.carsUpdate();
   };
 
   logoutSuccess = () => {
-    //TODO odlogiraj sa servera
-    setTimeout(() => this.setState({tipKorisnika: 3}), 501)
+    fetch('/logout')
+        .then(() =>this.setState({tipKorisnika: 3}))
+        .catch(() => this.setState({tipKorisnika: 3}));
 
     sessionStorage.clear()
   };
@@ -139,19 +134,42 @@ export default class App extends Component {
   carsUpdate = () => {
     fetch('/automobili')
         .then(res => res.json())
-        .then(data => this.setState({cars: data}));
+        .then(data => {
+          this.setState({cars: data});
+        })
+        .catch(err => this.logoutSuccess());
   };
 
   parkingsUpdate = () => {
-    this.setState({parkings: this.getParkings()});
+
+    fetch('/parkiralista')
+        .then(res => res.json())
+        .then(parkings => {
+          fetch('/parkiralista/slobodna')
+              .then(res => res.json())
+              .then(data => {
+                let rez = [];
+                data.forEach(p => {
+                  const id = p.parkiralisteID;
+                  let parking = this.getParkingOfId(id, parkings);
+                  parking = {
+                    ...parking,
+                    popunjenost: parking.kapacitet - p.brojSlobodnihMjesta
+                  };
+                  rez.push(parking);
+                });
+                this.setState({parkings: rez})
+              })
+        });
   };
+
 
   isAddingNewParkingToggle = () => {
     this.setState(state => ({isAddingNewParking: !state.isAddingNewParking}));
   };
 
   componentWillUnmount() {
-    //TODO odlogiraj sa servera
+    clearInterval(this.puID);
   }
 
   render() {
@@ -159,7 +177,7 @@ export default class App extends Component {
 
     let navBar = <NavBar id="navbar" loginSuccess={this.loginSuccess} logoutSuccess={this.logoutSuccess} tipKorisnika={tipKorisnika}
                            cars={cars} carsUpdate={this.carsUpdate} addCar={this.addCar} newParkingToggle={this.isAddingNewParkingToggle}
-                           isAddingNewParking={isAddingNewParking}
+                           isAddingNewParking={isAddingNewParking} parkingName={this.getParkingNameOfId}
     />;
 
     navBar = isAddingNewParking ? null : navBar;

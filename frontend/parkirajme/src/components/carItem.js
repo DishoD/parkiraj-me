@@ -8,8 +8,6 @@ class CarItem extends Component {
     };
 
     carRemoved = () => {
-        //TODO
-
         fetch('/automobili/' + this.props.car.registracijskaOznaka, {
            method: 'DELETE'
         });

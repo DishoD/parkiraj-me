@@ -11,20 +11,34 @@ export default class TrajnaRezervacijaForm extends Component {
     };
 
     register = () => {
+        const data = {
+            parkingID: this.props.parking.id,
+        };
 
-        //TODO
-
-        //registriraj na backendu
-
-        let test = true;
-        //ako je i dalje ispravno
-        let alertMsg = test ? "Uspješna rezervacija!" : "Parkiralište je popunjeno u nekim periodima. Ne mogu rezervirati."; //ovisno o erroru treba postavit grešku
-        if (test) setTimeout(() => this.props.onHide(), 5000);
-
-        this.setState({
-            registrationValid: test,
-            alertMsg: alertMsg
-        });
+        fetch('/rezervacije/trajna', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if(response.status != 200) {
+                    response.json().then(data => {
+                        this.setState({
+                            registrationValid: false,
+                            alertMsg: "Parkiralište je popunjeno u nekim periodima. Ne mogu rezervirati."
+                        });
+                    })
+                } else {
+                    this.setState({
+                        registrationValid: true,
+                        alertMsg: "Uspješna rezervacija!"
+                    });
+                    this.props.parkingsUpdate();
+                    setTimeout(() => this.props.onHide(), 2500)
+                }
+            });
     };
 
 

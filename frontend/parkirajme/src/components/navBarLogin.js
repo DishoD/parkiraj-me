@@ -12,7 +12,6 @@ export default class NavBarLogin extends Component {
     };
 
     logIn = (event) => {
-        //TODO
         event.preventDefault();
         this.setState({loginLoading: true});
         const {email, password} = this.state;
@@ -33,6 +32,8 @@ export default class NavBarLogin extends Component {
                     res.json().then(data => {
                         sessionStorage.setItem('tip', data.tip);
                         sessionStorage.setItem('name', data.ime);
+                        sessionStorage.setItem('id', data.id);
+                        sessionStorage.setItem('username', data.username);
                         this.setState({loginLoading: false});
                         setTimeout(this.props.loginSuccess, 10);
                     });

@@ -53,7 +53,7 @@ export default class NavBar extends Component{
 
     render() {
         const { registerShow, carsShow, reservationsShow, usersShow } = this.state;
-        const { loginSuccess, tipKorisnika, logoutSuccess, cars, carsUpdate, addCar, newParkingToggle, isAddingNewParking } = this.props;
+        const { loginSuccess, tipKorisnika, logoutSuccess, cars, carsUpdate, addCar, newParkingToggle, isAddingNewParking, parkingName } = this.props;
 
         let body = null;
         switch (tipKorisnika) {
@@ -123,10 +123,10 @@ export default class NavBar extends Component{
                     {body}
                 </Navbar>
 
-                <RegistrationModal show={registerShow} onHide={this.registerShowOff}/>
-                <CarsModal show={carsShow} onHide={this.carsShowOff} cars={cars} carsUpdate={carsUpdate} addCar={addCar}/>
-                <ReservationsModal show={reservationsShow} onHide={this.reservationsShowOff}/>
-                <UserModal show={usersShow} onHide={this.usersShowOff}/>
+                {tipKorisnika === 3 ? <RegistrationModal show={registerShow} onHide={this.registerShowOff}/> : null}
+                {tipKorisnika === 2 ? <UserModal show={usersShow} onHide={this.usersShowOff}/> : null}
+                {tipKorisnika === 0 ? <ReservationsModal show={reservationsShow} onHide={this.reservationsShowOff} parkingName={parkingName}/> : null}
+                {tipKorisnika === 0 ? <CarsModal show={carsShow} onHide={this.carsShowOff} cars={cars} carsUpdate={carsUpdate} addCar={addCar}/> : null}
             </div>
         );
     }

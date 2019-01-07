@@ -18,7 +18,7 @@ export default class NewParkingMarker extends Component {
     update = () => {
         const marker = this.ref.current;
         if (marker != null) {
-            const pos = marker.leafletElement.getLatLng();
+            const pos = [marker.leafletElement.getLatLng().lat, marker.leafletElement.getLatLng().lng];
             this.props.newParkingLocationUpdate(pos);
         }
     };
