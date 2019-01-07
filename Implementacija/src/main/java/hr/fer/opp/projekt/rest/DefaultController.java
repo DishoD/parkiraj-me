@@ -1,5 +1,6 @@
 package hr.fer.opp.projekt.rest;
 
+import hr.fer.opp.projekt.service.AdministratorService;
 import hr.fer.opp.projekt.service.KorisnikService;
 import hr.fer.opp.projekt.service.TvrtkaService;
 import hr.fer.opp.projekt.service.exceptions.RequestDeniedException;
@@ -19,6 +20,9 @@ public class DefaultController {
     @Autowired
     private TvrtkaService tvrtkaService;
 
+    @Autowired
+    private AdministratorService administratorService;
+
     @GetMapping("/login")
     public ModelAndView loginPage() {
         ModelAndView mv = new ModelAndView();
@@ -36,12 +40,15 @@ public class DefaultController {
         if (u.getAuthorities().containsAll(Roles.userAuthority)) {
             entity.setTip(0);
             entity.setIme(korisnikService.fetchKorisnik(u.getUsername()).getIme());
+            entity.setId(korisnikService.fetchKorisnik(u.getUsername()).getId());
         } else if (u.getAuthorities().containsAll(Roles.companyAuthority)) {
             entity.setTip(1);
             entity.setIme(tvrtkaService.fetchTvrtka(u.getUsername()).getIme());
+            entity.setId(tvrtkaService.fetchTvrtka(u.getUsername()).getId());
         } else if (u.getAuthorities().containsAll(Roles.adminAuthority)){
             entity.setTip(2);
             entity.setIme("Administrator");
+            entity.setId(administratorService.fetchAdministrator(u.getUsername()).getId());
         }
         return entity;
     }
@@ -50,6 +57,7 @@ public class DefaultController {
         private String username;
         private int tip;
         private String ime;
+        private Long id;
 
         public String getUsername() {
             return username;
@@ -73,6 +81,14 @@ public class DefaultController {
 
         public void setIme(String ime) {
             this.ime = ime;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
         }
     }
 }
