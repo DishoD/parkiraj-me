@@ -178,12 +178,12 @@ export default class ParkingEditor extends Component {
                             <FormGroup validationState={this.validationState(vkapacitet)}>
                             <h5><b>Kapacitet</b></h5>
                             <FormControl name="kapacitet" type="number" value={kapacitet} onChange={this.kapacitetChange}/>
-                            <HelpBlock>{(vkapacitet == null) || (vkapacitet ? '' : 'Moret unjeti kapacitet')}</HelpBlock>
+                            <HelpBlock>{(vkapacitet == null) || (vkapacitet ? '' : 'Morate unjeti kapacitet i kapacitet mora biti cijeli broj')}</HelpBlock>
                         </FormGroup>
                             <FormGroup validationState={this.validationState(vcijena)}>
                                 <h5><b>Cijena</b> <small>(kn/h)</small></h5>
                                 <FormControl name="cijena" type="number" value={cijena} onChange={this.cijenaChange}/>
-                                <HelpBlock>{(vcijena == null) || (vcijena ? '' : 'Moret unjeti cijenu')}</HelpBlock>
+                                <HelpBlock>{(vcijena == null) || (vcijena ? '' : 'Morate unjeti cijenu i cijena mora biti cijeli broj')}</HelpBlock>
                             </FormGroup>
                             <Well>Za odabir lokacije vucite marker na karti.</Well>
                             {

@@ -11,7 +11,8 @@ export default class LogoutBtn extends Component{
         this.setState({isLoggingOut: true});
         //posalji zahtjev na server za logout
 
-        setTimeout(() => {this.setState({isLoggingOut: false}); this.props.logoutSuccess()}, 500);
+        this.props.logoutSuccess();
+        setTimeout(() => {this.setState({isLoggingOut: false})}, 5000);
     };
 
     render() {

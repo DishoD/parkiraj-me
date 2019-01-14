@@ -177,7 +177,7 @@ export default class App extends Component {
 
     let navBar = <NavBar id="navbar" loginSuccess={this.loginSuccess} logoutSuccess={this.logoutSuccess} tipKorisnika={tipKorisnika}
                            cars={cars} carsUpdate={this.carsUpdate} addCar={this.addCar} newParkingToggle={this.isAddingNewParkingToggle}
-                           isAddingNewParking={isAddingNewParking} parkingName={this.getParkingNameOfId}
+                           isAddingNewParking={isAddingNewParking} parkingName={this.getParkingNameOfId} parkingsUpdate={this.parkingsUpdate}
     />;
 
     navBar = isAddingNewParking ? null : navBar;

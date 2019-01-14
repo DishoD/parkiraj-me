@@ -242,7 +242,7 @@ export default class MapControler extends Component{
 
                   {myPositionMarker}
                   {isAddingNewParking ? newParkingMarker : parkingMarkers}
-                  {parkirajMeBtn}
+                  {parkings.length > 0 ? parkirajMeBtn : null}
                   {centerMeBtn}
               </Map>
               <ParkingEditor isAddingNewParking={isAddingNewParking} newParkingToggle={newParkingToggle} parkingsUpdate={parkingsUpdate}

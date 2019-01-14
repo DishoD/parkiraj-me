@@ -68,7 +68,7 @@ export default class UsersModal extends Component {
     };
 
     render() {
-        const { show, onHide } = this.props;
+        const { show, onHide, parkingsUpdate } = this.props;
         const { stage, users, companies } = this.state;
 
         let body = null;
@@ -97,7 +97,7 @@ export default class UsersModal extends Component {
                         <Modal.Title>Tvrtke</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <UsersList type={stage} companies={companies} updateUsers={this.updateTvrtke}/>
+                        <UsersList type={stage} companies={companies} updateUsers={this.updateTvrtke} parkingsUpdate={parkingsUpdate}/>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button bsStyle="primary" onClick={this.resetStage}>Natrag</Button>
@@ -111,7 +111,7 @@ export default class UsersModal extends Component {
                         <Modal.Title>Korisnici</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <UsersList type={stage} users={users} updateUsers={this.updateKorisnici}/>
+                        <UsersList type={stage} users={users} updateUsers={this.updateKorisnici} parkingsUpdate={parkingsUpdate}/>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button bsStyle="primary" onClick={this.resetStage}>Natrag</Button>

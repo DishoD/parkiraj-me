@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {ListGroup} from "react-bootstrap";
 import ReservationItem from './reservationItem'
+import LoadingIconModal from './loadingIconModal'
 
 class ReservationsList extends Component {
     state = {
-        reservations: []
+        reservations: [],
+        loading: true
     };
 
     componentWillMount() {
@@ -25,21 +27,31 @@ class ReservationsList extends Component {
                        rez.push(reservation);
                    }
                });
-               this.setState({reservations: rez});
+               this.setState({
+                   reservations: rez,
+                   loading: false
+               });
             });
     };
 
     render() {
-        const {reservations} = this.state;
+        const {reservations, loading} = this.state;
+
+        if(loading) {
+            return <LoadingIconModal show={loading}/>;
+        }
 
         if(reservations.length === 0) {
             return <h3>Nemate trajnih rezervacija.</h3>
         }
 
+
         return (
-            <ListGroup componentClass="ul">
-                {reservations.map(reservation => <ReservationItem key={reservation.id} reservation={reservation} reservationsUpdate={this.reservationsUpdate}/>)}
-            </ListGroup>
+            <React.Fragment>
+                <ListGroup componentClass="ul">
+                    {reservations.map(reservation => <ReservationItem key={reservation.id} reservation={reservation} reservationsUpdate={this.reservationsUpdate}/>)}
+                </ListGroup>
+            </React.Fragment>
         );
     }
 }

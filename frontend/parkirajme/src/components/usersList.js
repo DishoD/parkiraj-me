@@ -6,7 +6,10 @@ function TvrtkaRow(props) {
     function removeTvrtka() {
         fetch('/tvrtke/'+props.company.email, {
             method: 'DELETE'
-        }).then(() => props.update());
+        }).then(() => {
+            props.update();
+            props.parkingsUpdate();
+        });
     }
 
     return (
@@ -40,7 +43,7 @@ function KorisnikRow(props) {
 
 export default class UsersList extends Component {
     render() {
-        const {type, users, companies, updateUsers} = this.props;
+        const {type, users, companies, updateUsers, parkingsUpdate} = this.props;
 
         let head = null, body = null;
 
@@ -61,7 +64,7 @@ export default class UsersList extends Component {
                 <tbody>
                 {
                     companies.map(company =>
-                       <TvrtkaRow  key={company.id} company={company} update={updateUsers} />
+                       <TvrtkaRow  key={company.id} company={company} update={updateUsers} parkingsUpdate={parkingsUpdate} />
                     )
                 }
                 </tbody>
