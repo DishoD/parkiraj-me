@@ -83,7 +83,8 @@ export default class App extends Component {
       this.updateTipKorisnika();
       if(tip === '0') this.carsUpdate();
     }
-    this.puID = setInterval(this.parkingsUpdate(), 60000);
+    this.parkingsUpdate();
+    this.puID = setInterval(this.parkingsUpdate, 30000);
   }
 
   getParkingOfId = (id, parkings) => {
