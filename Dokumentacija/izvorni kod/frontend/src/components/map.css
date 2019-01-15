@@ -1,0 +1,14 @@
+.map {
+    width: 100vw;
+    height: 100vh;
+}
+
+#parkiraj-me-btn {
+    position: absolute;
+    left: 20px;
+    bottom: 175px;
+    z-index: 999;
+    border-radius: 12px;
+}
+
+
