@@ -10,5 +10,6 @@ public interface KorisnikService {
     Korisnik fetchKorisnik(Long id);
     Korisnik fetchKorisnik(String email);
     boolean containsKorisnik(String email);
+    boolean containsKorisnikByOib(String oib);
     boolean deleteKorisnik(Korisnik korisnik);
 }

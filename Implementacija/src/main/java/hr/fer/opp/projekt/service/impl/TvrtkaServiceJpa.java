@@ -50,9 +50,7 @@ public class TvrtkaServiceJpa implements TvrtkaService {
 
         Util.checkField(tvrtka.getOib(), "oib");
         Assert.isTrue(tvrtka.getOib().matches(Util.OIB_FORMAT), "OIB mora imati 11 znamenaka");
-        if (tvrtkaRepository.countByOib(tvrtka.getOib()) > 0) {
-            throw new RequestDeniedException("Tvrtka već postoji");
-        }
+        Assert.isTrue(Util.checkIfUniqueOib(tvrtka.getOib(), korisnikService, this), "OIB se već koristi.");
 
         Util.checkField(tvrtka.getPasswordHash(), "password");
         tvrtka.setPasswordHash(new BCryptPasswordEncoder().encode(tvrtka.getPasswordHash()));
@@ -76,6 +74,11 @@ public class TvrtkaServiceJpa implements TvrtkaService {
     @Override
     public boolean containsTvrtka(String email) {
         return tvrtkaRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public boolean containsTvrtkaByOib(String oib) {
+        return tvrtkaRepository.countByOib(oib) > 0;
     }
 
     @Override

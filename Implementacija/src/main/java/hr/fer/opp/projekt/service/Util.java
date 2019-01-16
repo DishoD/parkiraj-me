@@ -1,5 +1,6 @@
 package hr.fer.opp.projekt.service;
 
+import hr.fer.opp.projekt.domain.Korisnik;
 import org.springframework.util.Assert;
 
 public class Util {
@@ -34,5 +35,20 @@ public class Util {
                                              AdministratorService administratorService,
                                              TvrtkaService tvrtkaService) {
         return (!korisnikService.containsKorisnik(email) && !administratorService.containsAdministrator(email) && !tvrtkaService.containsTvrtka(email));
+    }
+
+
+    /**
+     * Provjerava sadrzi li ijedan od servisa dani oib.
+     * @param oib
+     * @param korisnikService
+     * @param tvrtkaService
+     * @return
+     */
+    public static boolean checkIfUniqueOib(String oib,
+                                           KorisnikService korisnikService,
+                                           TvrtkaService tvrtkaService) {
+        return (!korisnikService.containsKorisnikByOib(oib)  && !tvrtkaService.containsTvrtkaByOib(oib));
+
     }
 }
