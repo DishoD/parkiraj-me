@@ -12,3 +12,6 @@ Treći sastanak. Ostali zahtjevi, razrada funkcionalnosti aplikacije, model baze
 
 #26.12.2018.
 Peti sastanak. Dogovoren početak rada na implementaciji i specificirana podjela rada.
+
+#16.1.2019. 
+Šesti sastanak. Podjela posla u vezi završnih promjena na dokumentaciji. Ispravci pogrešaka. 
