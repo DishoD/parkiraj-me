@@ -15,6 +15,18 @@ import java.util.List;
 @RequestMapping("/korisnici")
 public class KorisnikController {
 
+    private static class CurrentUser {
+        private String email;
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+    }
+
     @Autowired
     private KorisnikService korisnikService;
 
@@ -42,5 +54,14 @@ public class KorisnikController {
     @Secured(Roles.ADMIN)
     public Boolean deleteKorisnik(@PathVariable String email) {
         return korisnikService.deleteKorisnik(korisnikService.fetchKorisnik(email));
+    }
+
+    @GetMapping("/current")
+    public CurrentUser getCurrent(@AuthenticationPrincipal User u) {
+        CurrentUser user = new CurrentUser();
+        if (u != null) {
+            user.setEmail(u.getUsername());
+        }
+        return user;
     }
 }

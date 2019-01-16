@@ -8,62 +8,6 @@ const position = {
   Zagreb: [45.810875, 15.974711]
 };
 
-function getRndInteger(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) ) + min;
-}
-
-var parkiralista = [
-  {
-    id: '1',
-    OIB: '12',
-    tvrtkaID: '11',
-    ime: 'Tuškanac',
-    lokacija: [45.815458, 15.969460],
-    kapacitet: 500,
-    popunjenost: getRndInteger(300,500),
-    cijena: 12
-  },
-  {
-    id: '2',
-    OIB: '12',
-    tvrtkaID: '11',
-    ime: 'Ilica Parking',
-    lokacija: [45.813111, 15.968962],
-    kapacitet: 600,
-    popunjenost: getRndInteger(400,500),
-    cijena: 15
-  },
-  {
-    id: '3',
-    OIB: '56',
-    tvrtkaID: '17',
-    ime: 'Arena Zagreb',
-    lokacija: [45.769904, 15.943784],
-    kapacitet: 500,
-    popunjenost: getRndInteger(490,500),
-    cijena: 7
-  },
-  {
-    id: '4',
-    OIB: '88',
-    tvrtkaID: '56',
-    ime: 'Paromlin',
-    lokacija: [45.802892, 15.978865],
-    kapacitet: 500,
-    popunjenost: getRndInteger(490,500),
-    cijena: 5
-  },
-  {
-    id: '5',
-    OIB: '88',
-    tvrtkaID: '56',
-    ime: 'Javna garaža Svetice',
-    lokacija: [45.814839, 16.013869],
-    kapacitet: 150,
-    popunjenost: getRndInteger(50,150),
-    cijena: 6
-  },
-];
 
 
 export default class App extends Component {
@@ -84,7 +28,9 @@ export default class App extends Component {
       if(tip === '0') this.carsUpdate();
     }
     this.parkingsUpdate();
+    this.onFocus();
     this.puID = setInterval(this.parkingsUpdate, 30000);
+    window.addEventListener("focus", this.onFocus);
   }
 
   getParkingOfId = (id, parkings) => {
@@ -169,8 +115,27 @@ export default class App extends Component {
     this.setState(state => ({isAddingNewParking: !state.isAddingNewParking}));
   };
 
+  onFocus = () => {
+    const tip = sessionStorage.getItem('tip');
+    const username = sessionStorage.getItem('username');
+    if(tip != null) {
+        fetch('korisnici/current')
+            .then(res => res.json())
+            .then( data => {
+                console.log(data);
+                if(username !== data.email) {
+                  console.log(username);
+                  alert("Niste više prijavljeni!");
+                  sessionStorage.clear();
+                  this.setState({tipKorisnika: 3});
+                }
+            })
+    }
+  };
+
   componentWillUnmount() {
     clearInterval(this.puID);
+    window.removeEventListener("focus", this.onFocus)
   }
 
   render() {

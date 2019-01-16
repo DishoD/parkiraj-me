@@ -73,7 +73,7 @@ export default class PonavljajucaRezervacijaForm extends Component {
                         response.json().then(data => {
                             this.setState({
                                 registrationValid: false,
-                                alertMsg: "Parkiralište je popunjeno u odabranom periodu! Odaberite drugo vrijeme."
+                                alertMsg: data.message
                             });
                         })
                     } else {
