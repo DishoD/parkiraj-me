@@ -26,7 +26,7 @@ public class Parkiraliste {
     private Integer kapacitet;
 
     @NotNull
-    private Integer cijena;
+    private Double cijena;
 
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Rezervacija> rezervacije;
@@ -54,11 +54,11 @@ public class Parkiraliste {
         this.kapacitet = kapacitet;
     }
 
-    public Integer getCijena() {
+    public Double getCijena() {
         return cijena;
     }
 
-    public void setCijena(Integer cijena) {
+    public void setCijena(Double cijena) {
         this.cijena = cijena;
     }
 

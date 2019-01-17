@@ -38,7 +38,7 @@ export default class ParkingEditor extends Component {
 
     cijenaChange = (e) => {
         const cijena = e.target.value;
-        let test = cijena.length > 0 && /^\d+$/.test(cijena);
+        let test = cijena.length > 0 && Number(cijena) > 0;
         this.setState({
             cijena: cijena,
             vcijena: test,
@@ -183,7 +183,7 @@ export default class ParkingEditor extends Component {
                             <FormGroup validationState={this.validationState(vcijena)}>
                                 <h5><b>Cijena</b> <small>(kn/h)</small></h5>
                                 <FormControl name="cijena" type="number" value={cijena} onChange={this.cijenaChange}/>
-                                <HelpBlock>{(vcijena == null) || (vcijena ? '' : 'Morate unjeti cijenu i cijena mora biti cijeli broj')}</HelpBlock>
+                                <HelpBlock>{(vcijena == null) || (vcijena ? '' : 'Morate unijeti cijenu koja mora biti pozitivan broj')}</HelpBlock>
                             </FormGroup>
                             <Well>Za odabir lokacije vucite marker na karti.</Well>
                             {

@@ -11,5 +11,6 @@ public interface TvrtkaService {
     Tvrtka fetchTvrtka(Long id);
     Tvrtka fetchTvrtka(String email);
     boolean containsTvrtka(String email);
+    boolean containsTvrtkaByOib(String oib);
     Boolean deleteTvrtka(String email);
 }

@@ -7,6 +7,7 @@ import hr.fer.opp.projekt.service.*;
 import hr.fer.opp.projekt.service.exceptions.EntityMissingException;
 import hr.fer.opp.projekt.service.exceptions.RequestDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -49,9 +50,7 @@ public class KorisnikServiceJpa implements KorisnikService {
 
         Util.checkField(korisnik.getOib(), "oib");
         Assert.isTrue(korisnik.getOib().matches(Util.OIB_FORMAT), "OIB mora imati 11 znamenaka");
-        if (korisnikRepository.countByOib(korisnik.getOib()) > 0) {
-            throw new RequestDeniedException("Korisnik već postoji");
-        }
+        Assert.isTrue(Util.checkIfUniqueOib(korisnik.getOib(), this, tvrtkaService), "OIB se već koristi.");
 
         Assert.isTrue(creditCardNumberIsValid(korisnik.getBrojKreditneKartice()), "Broj kreditne kartice nije valjan.");
 
@@ -77,6 +76,11 @@ public class KorisnikServiceJpa implements KorisnikService {
     @Override
     public boolean containsKorisnik(String email) {
         return korisnikRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public boolean containsKorisnikByOib(String oib) {
+        return korisnikRepository.countByOib(oib) > 0;
     }
 
     @Override

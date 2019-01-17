@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,6 +63,9 @@ public class RezervacijaServiceJpa implements RezervacijaService {
         Long parkingID = dto.getParkingID();
         Date vrijemePocetka = new Date(dto.getVrijemePocetka());
         Long trajanje = dto.getTrajanje();
+
+        Double hours = milisecondsToHours(vrijemePocetka.getTime() - System.currentTimeMillis());
+        Assert.isTrue(hours > 6, "Jednokratno možete rezervirati minimalno 6 sati unaprijed.");
 
         Assert.notNull(parkingID, "Potrebno je predati ID parkiralista.");
         Assert.notNull(vrijemePocetka, "Potrebno je predati vrijeme početka.");
@@ -192,6 +194,10 @@ public class RezervacijaServiceJpa implements RezervacijaService {
 
     private Long hoursToMilliseconds(Long hours) {
         return hours * 60 * 60 * 1000;
+    }
+
+    private Double milisecondsToHours(Long miliseconds) {
+        return miliseconds * 1.0 / (1000 * 60 * 60);
     }
 
     private Date convertToDate(LocalDate dateToConvert) {

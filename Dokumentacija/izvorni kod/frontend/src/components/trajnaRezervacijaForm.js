@@ -27,7 +27,7 @@ export default class TrajnaRezervacijaForm extends Component {
                     response.json().then(data => {
                         this.setState({
                             registrationValid: false,
-                            alertMsg: "Parkiralište je popunjeno u nekim periodima. Ne mogu rezervirati."
+                            alertMsg: data.message
                         });
                     })
                 } else {
