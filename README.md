@@ -1,10 +1,5 @@
-﻿# ferovci
-testni commit
-aaaaaaaaaaaaaaaaaa
-još jedan commit test
-commit test iz online GitLab editora
+﻿# parkiraj-me
 
-commit iz testBranch-a
-testBranch: nekakav test
-
-opet
+This repository contains a web app called ParkirajMe. This was a team project for software desing course.
+This repo contains both a source code for the project and project's documentation. The app was built
+using Spring and React.
